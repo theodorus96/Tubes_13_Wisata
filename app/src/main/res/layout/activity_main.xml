@@ -5,9 +5,14 @@
     android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
     tools:context=".MainActivity">
 
+    <ImageView
+        android:background="@drawable/background"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.8"
+        tools:ignore="MissingConstraints" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -25,6 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Login"
+        android:fontFamily="sans-serif-condensed-medium"
         android:textColor="@color/white"
         style="@style/TextAppearance.MaterialComponents.Headline4"
         app:layout_constraintEnd_toEndOf="@+id/imageView"
@@ -96,6 +102,7 @@
             android:id="@+id/btnLogin"
             android:layout_width="243dp"
             android:layout_height="wrap_content"
+            android:backgroundTint="#69330F"
             android:text="Login" />
     </LinearLayout>
 
@@ -112,10 +119,14 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnRegister"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="243dp"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:text="Register" />
+            android:backgroundTint="@color/brown"
+
+            android:text="Register"
+            android:textColor="@color/white"
+            app:iconTint="#FFFFFF" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
