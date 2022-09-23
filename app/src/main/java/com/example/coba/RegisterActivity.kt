@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.example.coba.databinding.ActivityRegisterBinding
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 class RegisterActivity : AppCompatActivity() {
@@ -25,38 +26,24 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var mainRegister: ConstraintLayout
 
     private lateinit var btnRegister: Button
+    private lateinit var binding: ActivityRegisterBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityRegisterBinding.inflate(layoutInflater)
+        val view = binding.root
         setContentView(R.layout.activity_register)
 
-        nameInput = findViewById(R.id.etName)
-        usernameInput = findViewById(R.id.etUsername)
-        passwordInput = findViewById(R.id.etPassword)
-        phoneInput = findViewById(R.id.etPhoneNumber)
-        bornDateInput = findViewById(R.id.etBornDate)
-        emailInput = findViewById(R.id.etEmail)
-        btnRegister= findViewById(R.id.btnRegister)
-        mainRegister = findViewById(R.id.mainRegister)
-
-        vName =  findViewById(R.id.tilName)
-        vUsername = findViewById(R.id.tilUsername)
-        vPassword =  findViewById(R.id.tilPassword)
-        vPhone = findViewById(R.id.tilPhoneNumber)
-        vBorndate =  findViewById(R.id.tilBornDate)
-        vEmail =  findViewById(R.id.tilEmail)
-
-
-        btnRegister.setOnClickListener {
+        binding.btnRegister.setOnClickListener{
             val intent = Intent(this,MainActivity::class.java)
             val mBundle = Bundle()
-            var checkRegister = true
-            val name : String = vName.getEditText()?.getText().toString()
-            val username : String = vUsername.getEditText()?.getText().toString()
-            val password : String = vPassword.getEditText()?.getText().toString()
-            val email : String = vEmail.getEditText()?.getText().toString()
-            val bornDate : String = vBorndate.getEditText()?.getText().toString()
-            val phone : String = vPhone.getEditText()?.getText().toString()
+            var checkRegister : Boolean = true
+            val name : String = binding.etName.toString()
+            val bornDate : String = binding.etBornDate.toString()
+            val phone : String = binding.etPhoneNumber.toString()
+            val email : String = binding.etEmail.toString()
+            val username : String = binding.etUsername.toString()
+            val password : String = binding.etPassword.toString()
 
             if(name.isEmpty()){
                 nameInput.setError("Nama Tidak Boleh Kosong")
