@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
                         putInt("id", users.id)
                         putString("username", users.username)
                         putString("password", users.password)
-                    }
+                    }.apply()
 
                     startActivity(moveHome)
                 }
