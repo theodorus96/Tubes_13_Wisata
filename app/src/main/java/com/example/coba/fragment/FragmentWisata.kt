@@ -1,4 +1,4 @@
-package com.example.coba
+package com.example.coba.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.coba.R
+import com.example.coba.RVWisataAdapter
 import com.example.coba.entity.wisata
 
 class FragmentWisata : Fragment() {
