@@ -2,8 +2,10 @@ package com.example.coba
 
 import android.os.Bundle
 import android.provider.SyncStateContract
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.example.coba.databinding.ActivityRegisterBinding
 import com.example.coba.room.Constant
 import com.example.coba.room.User
 import com.example.coba.room.UserDB
@@ -14,57 +16,35 @@ import kotlinx.coroutines.launch
 
 class EditActivity : AppCompatActivity() {
 
-    val db by lazy {UserDB(this)}
-    private var id: Int = 0
+    val db by lazy { UserDB(this) }
+    var binding: ActivityRegisterBinding? = null
 
-    override fun onCreate(savedInstanceState: Bundle?){
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_edit)
-        setupView()
-        setupListener()
-    }
 
-        fun setupView(){
-            supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-            val intentType = intent.getIntExtra("intent type", 0)
-            when (intentType){
-                Constant.TYPE_CREATE -> {
-                    btnUpdate.visibility =  View.GONE
-                }
-                Constant.TYPE_UPDATE -> {
-                    btnUpdate.visibility = View.GONE
-                    getUser()
-                }
-            }
-        }
+        binding = ActivityRegisterBinding.inflate(layoutInflater)
 
-        private fun setupListener(){
-            btnUpdate.setOnClickListener{
-                CoroutineScope(Dispatchers.IO).launch {
-                    db.userDao().updateUser(
-                        User(id, etName.text.toString(), etUsername.text.toString(), etEmail.text.toString(), etBornDate.text.toString(),
-                            etPhoneNumber.text.toString())
-                    )
-                    finish()
-                }
-            }
-        }
+        val sp = getSharedPreferences("user", 0)
+        val id: Int = sp.getInt("id", 0)
 
-        fun getUser(){
-            id = intent.getIntExtra("intent id", 0)
+        binding!!.btnRegister.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
-                val user = db.userDao().getUser(id)[0]
-                etName.setText(user.nama)
-                etUsername.setText(user.username)
-                etEmail.setText(user.email)
-                etBornDate.setText(user.borndate)
-                etPhoneNumber.setText(user.phonenumber)
+                val loggedUser: List<User> = db.userDao().getUser(id)
+                val logged = loggedUser[0]
+                db.userDao().updateUser(
+                    User(
+                        logged.id,
+                        binding!!.etName.text.toString(),
+                        binding!!.etUsername.text.toString(),
+                        binding!!.etEmail.text.toString(),
+                        binding!!.etBornDate.text.toString(),
+                        binding!!.etPhoneNumber.text.toString(),
+                    )
+                )
+                finish()
             }
         }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return super.onSupportNavigateUp()
-     }
+        setContentView(binding?.root)
+    }
 }
 
