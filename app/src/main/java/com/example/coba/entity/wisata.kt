@@ -2,7 +2,7 @@ package com.example.coba.entity
 
 import com.example.coba.R
 
-class wisata(var name: String, var lokasi: String, var image:Int) {
+class  wisata(var name: String, var lokasi: String, var image:Int) {
     companion object{
         @JvmField
         var listOfWisata = arrayOf(
