@@ -1,43 +1,27 @@
 package com.example.coba
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.coba.databinding.ActivityRegisterBinding
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
+import com.example.coba.room.User
+import com.example.coba.room.UserDB
+
+
 class RegisterActivity : AppCompatActivity() {
 
-    private lateinit var vName: TextInputLayout
-    private lateinit var vUsername: TextInputLayout
-    private lateinit var vPassword: TextInputLayout
-    private lateinit var vBorndate : TextInputLayout
-    private lateinit var vPhone : TextInputLayout
-    private lateinit var vEmail : TextInputLayout
-    private lateinit var nameInput : TextInputEditText
-    private lateinit var usernameInput : TextInputEditText
-    private lateinit var passwordInput : TextInputEditText
-    private lateinit var phoneInput : TextInputEditText
-    private lateinit var bornDateInput : TextInputEditText
-    private lateinit var emailInput : TextInputEditText
-
-
-    private lateinit var mainRegister: ConstraintLayout
-
-    private lateinit var btnRegister: Button
+    val db by lazy { UserDB(this,) }
     private lateinit var binding: ActivityRegisterBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(R.layout.activity_register)
+        setContentView(binding.root)
 
         binding.btnRegister.setOnClickListener{
             val intent = Intent(this,MainActivity::class.java)
             val mBundle = Bundle()
-            var checkRegister : Boolean = true
+            var checkRegister = true
             val name : String = binding.etName.toString()
             val bornDate : String = binding.etBornDate.toString()
             val phone : String = binding.etPhoneNumber.toString()
@@ -46,36 +30,54 @@ class RegisterActivity : AppCompatActivity() {
             val password : String = binding.etPassword.toString()
 
             if(name.isEmpty()){
-                nameInput.setError("Nama Tidak Boleh Kosong")
+                binding.etName.setError("Nama Tidak Boleh Kosong")
                 checkRegister = false
             }
             if(username.isEmpty()){
-                usernameInput.setError("Username Tidak Boleh Kosong")
+                binding.etUsername.setError("Username Tidak Boleh Kosong")
                 checkRegister = false
             }
             if(password.isEmpty()){
-                passwordInput.setError("Password Tidak Boleh Kosong")
+                binding.etPassword.setError("Password Tidak Boleh Kosong")
                 checkRegister = false
             }
             if(email.isEmpty()){
-                emailInput.setError("Email Tidak Boleh Kosong")
+                binding.etEmail.setError("Email Tidak Boleh Kosong")
                 checkRegister = false
             }
             if(bornDate.isEmpty()){
-                bornDateInput.setError("Tanggal Lahir Tidak Boleh Kosong")
+                binding.etBornDate.setError("Tanggal Lahir Tidak Boleh Kosong")
                 checkRegister = false
             }
             if(phone.isEmpty()){
-                phoneInput.setError("Nomor Telepon Tidak Boleh Kosong")
+                binding.etPhoneNumber.setError("Nomor Telepon Tidak Boleh Kosong")
                 checkRegister = false
             }
             if(checkRegister==true) {
-                mBundle.putString("nama", vName.getEditText()?.getText().toString())
-                mBundle.putString("username", vUsername.getEditText()?.getText().toString())
-                mBundle.putString("password", vPassword.getEditText()?.getText().toString())
-                mBundle.putString("email", vEmail.getEditText()?.getText().toString())
-                mBundle.putString("bornDate", vBorndate.getEditText()?.getText().toString())
-                mBundle.putString("phone", vPhone.getEditText()?.getText().toString())
+                val nama = binding.etName.text.toString()
+                val bornDate = binding.etBornDate.text.toString()
+                val email = binding.etEmail.text.toString()
+                val username = binding.etUsername.text.toString()
+                val password = binding.etPassword.text.toString()
+                println(nama+username+password)
+                val user = User(0,nama,bornDate,email, username ,password)
+
+                db.userDao().addUser(user)
+                val sp=getSharedPreferences("USER_LOGIN", Context.MODE_PRIVATE)
+                val editor=sp.edit()
+
+                editor.apply{
+                    putInt("id",user.id)
+                    putString("username",user.username)
+                    putString("password",user.password)
+                }.apply()
+
+                mBundle.putString("nama", binding.etName.text.toString())
+                mBundle.putString("username", binding.etUsername.text.toString())
+                mBundle.putString("password", binding.etPassword.text.toString())
+                mBundle.putString("email", binding.etEmail.text.toString())
+                mBundle.putString("bornDate", binding.etBornDate.text.toString())
+                mBundle.putString("phone", binding.etPhoneNumber.text.toString())
 
                 intent.putExtra("register",mBundle)
                 startActivity(intent)

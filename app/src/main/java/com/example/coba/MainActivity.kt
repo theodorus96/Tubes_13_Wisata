@@ -1,11 +1,13 @@
 package com.example.coba
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.example.coba.room.UserDB
 import com.google.android.material.textfield.TextInputLayout
 
 class MainActivity : AppCompatActivity() {
@@ -15,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var  mBundle: Bundle
     lateinit var vUsername: String
     lateinit var vPassword : String
+    val db by lazy { UserDB (this) }
     override fun onCreate(savedInstanceState: Bundle?) {
         getSupportActionBar()?.hide()
         super.onCreate(savedInstanceState)
@@ -26,9 +29,7 @@ class MainActivity : AppCompatActivity() {
         val btnLogin: Button = findViewById(R.id.btnLogin)
         val btnRegister: Button = findViewById(R.id.btnRegister)
 
-        if(intent.getBundleExtra("register")!=null){
-            getBundle()
-        }
+        getBundle()
 
         btnRegister.setOnClickListener {
             val moveRegister = Intent( this@MainActivity,RegisterActivity::class.java)
@@ -49,20 +50,32 @@ class MainActivity : AppCompatActivity() {
                 inputPassword.setError("Password must be filled with text")
                 checkLogin=false
             }
+            if (username.isEmpty()==false && password.isEmpty()==false) {
+                val users = db.userDao().getUser(username, password)
 
-            if (username == vUsername && password == vPassword) checkLogin=true
-            if(!checkLogin) return@OnClickListener
-            val moveHome = Intent( this@MainActivity,HomeActivity::class.java)
-            startActivity(moveHome)
+                if (users != null) {
+                    val moveHome = Intent(this@MainActivity, HomeActivity::class.java)
+                    val sp = getSharedPreferences("USER_LOGIN", Context.MODE_PRIVATE)
+                    val editor = sp.edit()
+
+                    editor.apply {
+                        putInt("id", users.id)
+                        putString("username", users.username)
+                        putString("password", users.password)
+                    }
+
+                    startActivity(moveHome)
+                }
+            }
         })
     }
     fun getBundle(){
-        mBundle = intent.getBundleExtra("register")!!
-        vUsername = mBundle.getString("username")!!
-        vPassword = mBundle.getString("password")!!
+        val sp = getSharedPreferences("USER_LOGIN", Context.MODE_PRIVATE)
+        val username = sp.getString("username","")
+        val password = sp.getString("password","")
 
-        inputUsername.editText?.setText(vUsername)
-        inputPassword.editText?.setText(vPassword)
+        inputUsername.editText?.setText(username)
+        inputPassword.editText?.setText(password)
     }
 
 }
