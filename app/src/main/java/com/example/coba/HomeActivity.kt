@@ -8,6 +8,9 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import com.example.coba.fragment.FragmentHome
+import com.example.coba.fragment.FragmentProfil
+import com.example.coba.fragment.FragmentWisata
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class HomeActivity : AppCompatActivity() {

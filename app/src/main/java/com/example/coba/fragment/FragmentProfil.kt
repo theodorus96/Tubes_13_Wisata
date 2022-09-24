@@ -1,13 +1,20 @@
-package com.example.coba
+package com.example.coba.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.coba.R
+import com.example.coba.databinding.FragmentProfilBinding
+import com.example.coba.room.UserDB
 
 
-class FragmentProfil : Fragment() {
+class FragmentProfil : Fragment(R.layout.fragment_profil) {
+    private var _binding : FragmentProfilBinding? = null
+    private val binding get() = _binding!!
+
+    private lateinit var userDB: UserDB
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
