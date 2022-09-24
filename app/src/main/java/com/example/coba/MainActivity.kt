@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var vUsername: String
     lateinit var vPassword : String
     override fun onCreate(savedInstanceState: Bundle?) {
+        getSupportActionBar()?.hide()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
