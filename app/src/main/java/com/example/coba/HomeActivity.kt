@@ -12,6 +12,7 @@ import com.example.coba.fragment.FragmentWisata
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class HomeActivity : AppCompatActivity() {
+    //coba komen
     lateinit var bottomNav : BottomNavigationView
     override fun onCreate(savedInstanceState: Bundle?) {
         getSupportActionBar()?.hide()
