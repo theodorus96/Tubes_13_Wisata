@@ -57,20 +57,21 @@ class RegisterActivity : AppCompatActivity() {
                 val nama = binding.etName.text.toString()
                 val bornDate = binding.etBornDate.text.toString()
                 val email = binding.etEmail.text.toString()
+                val phoneNum = binding.etPhoneNumber.text.toString()
                 val username = binding.etUsername.text.toString()
                 val password = binding.etPassword.text.toString()
                 println(nama+username+password)
-                val user = User(0,nama,bornDate,email, username ,password)
+                val user = User(0,nama,bornDate,email, phoneNum, username ,password)
 
                 db.userDao().addUser(user)
-                val sp=getSharedPreferences("USER_LOGIN", Context.MODE_PRIVATE)
-                val editor=sp.edit()
-
-                editor.apply{
-                    putInt("id",user.id)
-                    putString("username",user.username)
-                    putString("password",user.password)
-                }.apply()
+                //val sp=getSharedPreferences("USER_LOGIN", Context.MODE_PRIVATE)
+//                val editor=sp.edit()
+//
+//                editor.apply{
+//                    putInt("id",user.id)
+//                    putString("username",user.username)
+//                    putString("password",user.password)
+//                }.apply()
 
                 mBundle.putString("nama", binding.etName.text.toString())
                 mBundle.putString("username", binding.etUsername.text.toString())

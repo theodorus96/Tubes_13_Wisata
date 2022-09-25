@@ -2,6 +2,7 @@ package com.example.coba
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -22,7 +23,6 @@ class MainActivity : AppCompatActivity() {
         getSupportActionBar()?.hide()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         inputUsername = findViewById(R.id.inputLayoutUsername)
         inputPassword = findViewById(R.id.inputLayoutPassword)
         mainLayout = findViewById(R.id.mainLayout)
@@ -51,7 +51,9 @@ class MainActivity : AppCompatActivity() {
                 checkLogin=false
             }
             if (username.isEmpty()==false && password.isEmpty()==false) {
-                val users = db.userDao().getUser(username, password)
+                    val users = db.userDao().getUser(username, password)
+
+
 
                 if (users != null) {
                     val moveHome = Intent(this@MainActivity, HomeActivity::class.java)

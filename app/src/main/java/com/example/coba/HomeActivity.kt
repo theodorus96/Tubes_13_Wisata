@@ -1,6 +1,7 @@
 package com.example.coba
 
 import android.content.DialogInterface
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -18,17 +19,17 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-        loadFragment(FragmentHome())
-
+        //loadFragment(FragmentHome())
+        changeFragment(FragmentHome())
         bottomNav= findViewById(R.id.bottom_navigation) as BottomNavigationView
         bottomNav.setOnNavigationItemReselectedListener {
             when (it.itemId) {
                 R.id.profil -> {
-                    loadFragment(FragmentProfil())
+                    changeFragment(FragmentProfil())
                     return@setOnNavigationItemReselectedListener
                 }
                 R.id.wisata -> {
-                    loadFragment(FragmentWisata())
+                    changeFragment(FragmentWisata())
                     return@setOnNavigationItemReselectedListener
                 }
                 R.id.menu_exit -> {
@@ -36,6 +37,8 @@ class HomeActivity : AppCompatActivity() {
                     builder.setMessage("Are you sure want to exit?")
                         .setNegativeButton("YES", object : DialogInterface.OnClickListener {
                             override fun onClick(dialogInterface: DialogInterface, i:Int){
+                                val logout = Intent(this@HomeActivity, MainActivity::class.java)
+                                startActivity(logout)
                                 finishAndRemoveTask()
                             }
                         }).setPositiveButton("No", object : DialogInterface.OnClickListener {
@@ -63,6 +66,11 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+//    fun changeActivity(activity: Class<*>) {
+//        val intent = Intent(this, activity)
+//        startActivity(intent)
+//    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if(item.itemId == R.id.wisata){
             changeFragment(FragmentWisata())
@@ -74,6 +82,8 @@ class HomeActivity : AppCompatActivity() {
             builder.setMessage("Are you sure want to exit?")
                 .setNegativeButton("YES", object : DialogInterface.OnClickListener {
                     override fun onClick(dialogInterface: DialogInterface, i:Int){
+                        val logout = Intent(this@HomeActivity, MainActivity::class.java)
+                        startActivity(logout)
                         finishAndRemoveTask()
                     }
                 }).setPositiveButton("No", object : DialogInterface.OnClickListener {
@@ -85,10 +95,10 @@ class HomeActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private  fun loadFragment(fragment: Fragment){
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.flFragment,fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
-    }
+//    private  fun loadFragment(fragment: Fragment){
+//        val transaction = supportFragmentManager.beginTransaction()
+//        transaction.replace(R.id.flFragment,fragment)
+//        transaction.addToBackStack(null)
+//        transaction.commit()
+//    }
 }
