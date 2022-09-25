@@ -110,12 +110,13 @@
         android:id="@+id/linearLayoutRegister"
         android:layout_width="250dp"
         android:layout_height="49dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.62"
+        app:layout_constraintHorizontal_bias="0.59"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.3">
+        app:layout_constraintVertical_bias="0">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnRegister"
