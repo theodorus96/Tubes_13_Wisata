@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.coba.EditActivity
 import com.example.coba.EditWisataActivity
 import com.example.coba.R
 import com.example.coba.RVWisataAdapter
