@@ -13,6 +13,7 @@ class EditWisataActivity : AppCompatActivity() {
     val db by lazy{UserDB(this)}
     private var WisataId : Int =0
     override fun onCreate(savedInstanceState: Bundle?) {
+        getSupportActionBar()?.hide()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_wisata)
         setupView()
