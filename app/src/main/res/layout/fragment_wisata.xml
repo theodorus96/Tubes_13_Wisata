@@ -16,6 +16,7 @@
             android:layout_height="50dp"
             android:layout_margin="10dp"
             android:layout_marginBottom="16dp"
+            android:backgroundTint="#69330F"
             android:text="Tambah Data"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
