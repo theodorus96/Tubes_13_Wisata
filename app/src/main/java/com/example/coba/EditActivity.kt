@@ -20,6 +20,7 @@ class EditActivity : AppCompatActivity() {
     private var UserId: Int = 0
     private var password: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
+        getSupportActionBar()?.hide()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit)
         setupListener()
