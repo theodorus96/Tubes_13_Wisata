@@ -72,9 +72,7 @@
                 android:id="@+id/etName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Nama Lengkap"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#FFF9F9" />
+                android:hint="Nama Lengkap" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout

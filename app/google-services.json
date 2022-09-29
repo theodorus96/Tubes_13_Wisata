@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "288537488104",
+    "project_id": "coba-a3481",
+    "storage_bucket": "coba-a3481.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:288537488104:android:f8f74c0274736dcd36b75d",
+        "android_client_info": {
+          "package_name": "com.example.coba"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "288537488104-fg6tip9q5oubaoj9h3aa2a2vsolcpv69.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZLmM1gZ31Jfsxzz8lj7nEbjWJaz4KcYA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "288537488104-fg6tip9q5oubaoj9h3aa2a2vsolcpv69.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
