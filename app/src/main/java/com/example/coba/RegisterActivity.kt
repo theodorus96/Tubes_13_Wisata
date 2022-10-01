@@ -27,9 +27,8 @@ class RegisterActivity : AppCompatActivity() {
     //Notifikasi
     //private var binding: ActivityRegisterBinding? = null
     private val CHANNEL_ID_1 = "channel_notification_01"
-    private val CHANNEL_ID_2 = "channel_notification_02"
     private val notificationId1 = 101
-    private val notificationId2 = 102
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
