@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import kotlinx.coroutines.Runnable
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.coba.room.UserDB
@@ -25,7 +26,6 @@ class EditWisataActivity : AppCompatActivity() {
     private val notificationId1 = 101
     private val CHANNEL_ID_2 = "channel_notification_02"
     private val notificationId2 = 102
-    private var download=0
     override fun onCreate(savedInstanceState: Bundle?) {
         getSupportActionBar()?.hide()
         super.onCreate(savedInstanceState)
@@ -146,18 +146,29 @@ class EditWisataActivity : AppCompatActivity() {
             setContentTitle("Menambahkan Wisata")
             setContentText("Wisata sedang ditambahkan")
             setSmallIcon(R.drawable.ic_baseline_location_on_24)
-            setPriority(NotificationCompat.PRIORITY_LOW)
+            setPriority(NotificationCompat.PRIORITY_HIGH)
         }
-        val PROGRESS_MAX = 100
-        val PROGRESS_CURRENT = 0
-        with(NotificationManagerCompat.from(this)) {
-            builder.setProgress(PROGRESS_MAX, PROGRESS_CURRENT, true)
+        var download = 0
+        NotificationManagerCompat.from(this).apply{
+            builder.setProgress(100, 0, false)
             notify(notificationId2, builder.build())
-            if(download == 100){
-                builder.setContentText("Wisata telah dibuat")
-                    .setProgress(0, 0, false)
-                notify(notificationId2, builder.build())
+
+        Thread(Runnable{
+            while(download < 100) {
+                Thread.sleep(250)
+                download += 10
+                runOnUiThread {
+                    builder.setProgress(100, download, false)
+                    notify(notificationId2, builder.build())
+                    if (download == 100) {
+                        builder.setContentText("Wisata telah dibuat")
+                        builder.setProgress(0, 0, false)
+                        notify(notificationId2, builder.build())
+                    }
+                }
             }
+        }).start()
+
         }
     }
 }
