@@ -59,7 +59,7 @@ class FragmentProfil : Fragment(R.layout.fragment_profil) {
         username.setText(user.username)
         email.setText(user.email)
         bornDate.setText(user.borndate)
-        phoneNum.setText(user.nama)
+        phoneNum.setText(user.phoneNum)
 
     }
 
