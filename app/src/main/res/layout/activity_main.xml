@@ -8,18 +8,19 @@
     tools:context=".MainActivity">
 
     <ImageView
+        android:layout_width="598dp"
+        android:layout_height="984dp"
+        android:alpha="0.6"
         android:background="@drawable/background"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:alpha="0.8"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="-187dp" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="189dp"
         android:layout_height="175dp"
         android:layout_marginTop="36dp"
-        android:src="@drawable/logo"
+        android:src="@drawable/logo1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -31,7 +32,7 @@
         android:layout_marginTop="16dp"
         android:text="Login"
         android:fontFamily="sans-serif-condensed-medium"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         style="@style/TextAppearance.MaterialComponents.Headline4"
         app:layout_constraintEnd_toEndOf="@+id/imageView"
         app:layout_constraintStart_toStartOf="@+id/imageView"

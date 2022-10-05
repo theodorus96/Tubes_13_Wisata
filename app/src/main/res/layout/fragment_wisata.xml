@@ -12,7 +12,7 @@
 
         <Button
             android:id="@+id/button_add"
-            android:layout_width="398dp"
+            android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_margin="10dp"
             android:layout_marginBottom="16dp"
