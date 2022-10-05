@@ -1,70 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="20dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/tv_nama_wisata"
-        style="@style/TextAppearance.MaterialComponents.Headline5"
-        android:layout_width="wrap_content"
+    <data>
+        <variable
+            name="wisata"
+            type="com.example.coba.room.Wisata" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="Nama Wisata"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.059"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="vertical"
+        android:padding="20dp">
 
-    <ImageView
-        android:id="@+id/icon_edit"
-        android:layout_width="39dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="4dp"
-        android:padding="10dp"
-        android:src="@drawable/ic_baseline_edit_24"
-        app:layout_constraintStart_toEndOf="@+id/imageWisata"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/tv_nama_wisata"
+            style="@style/TextAppearance.MaterialComponents.Headline5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@{wisata.nama}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.059"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/icon_delete"
-        android:layout_width="40dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="8dp"
-        android:padding="10dp"
-        android:src="@drawable/ic_baseline_delete_24"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/icon_edit"
+            android:layout_width="39dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="4dp"
+            android:padding="10dp"
+            android:src="@drawable/ic_baseline_edit_24"
+            app:layout_constraintStart_toEndOf="@+id/imageWisata"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_lokasi_wisata"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Lokasi Wisata"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.049"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_nama_wisata"
-        app:layout_constraintVertical_bias="0.238" />
+        <ImageView
+            android:id="@+id/icon_delete"
+            android:layout_width="40dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="8dp"
+            android:padding="10dp"
+            android:src="@drawable/ic_baseline_delete_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageWisata"
-        android:layout_width="138dp"
-        android:layout_height="78dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="8dp"
-        android:src="@drawable/image_bunake"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.747"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.536" />
+        <TextView
+            android:id="@+id/tv_lokasi_wisata"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{wisata.lokasi}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.049"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_nama_wisata"
+            app:layout_constraintVertical_bias="0.238" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/imageWisata"
+            android:layout_width="138dp"
+            android:layout_height="78dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/image_bunake"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.747"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.536" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
