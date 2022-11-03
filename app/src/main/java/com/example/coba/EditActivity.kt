@@ -28,6 +28,7 @@ class EditActivity : AppCompatActivity() {
         setContentView(R.layout.activity_edit)
         setupListener()
         setUser()
+
     }
 
     fun setUser() {

@@ -32,6 +32,9 @@
             android:name=".map.MainMap"
             android:exported="false" />
         <activity
+            android:name=".camera.MainCamera"
+            android:exported="false" />
+        <activity
             android:name=".SplashScreen"
             android:exported="true"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
