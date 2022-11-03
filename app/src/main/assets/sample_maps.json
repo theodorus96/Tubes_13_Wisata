@@ -1,0 +1,26 @@
+{
+  "results": [
+    {
+      "geometry" : {
+        "location" : {
+          "lat" : -7.779433,
+          "lng" : 110.415782
+        }
+      },
+      "name" : "Kampus 3 Universitas Atma Jaya Yogyakarta",
+      "vicinity" : "Jl. Babarsari No.43, Janti, Caturtunggal, Kec. Depok, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55281"
+    },
+    {
+      "geometry" : {
+        "location" : {
+          "lat" : -7.750222431150868,
+          "lng" : 110.4919457250158
+        }
+      },
+      "name" : "Candi Prambanan",
+      "vicinity" : "Jl. Raya Solo - Yogyakarta No.16, Kranggan, Bokoharjo, Kec. Prambanan, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55571"
+    }
+  ],
+  "status" : "OK"
+
+}

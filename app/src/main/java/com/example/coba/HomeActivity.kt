@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.example.coba.fragment.FragmentHome
 import com.example.coba.fragment.FragmentProfil
 import com.example.coba.fragment.FragmentWisata
+import com.example.coba.map.MainMap
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class HomeActivity : AppCompatActivity() {
@@ -30,6 +31,10 @@ class HomeActivity : AppCompatActivity() {
                 R.id.wisata -> {
                     changeFragment(FragmentWisata())
                     return@setOnNavigationItemReselectedListener
+                }
+                R.id.map -> {
+                    val moveMap = Intent(this@HomeActivity, MainMap::class.java)
+                    startActivity(moveMap)
                 }
                 R.id.menu_exit -> {
                     val builder: AlertDialog.Builder = AlertDialog.Builder(this@HomeActivity)

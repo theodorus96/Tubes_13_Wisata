@@ -29,6 +29,9 @@
             android:name=".HomeActivity"
             android:exported="false" />
         <activity
+            android:name=".map.MainMap"
+            android:exported="false" />
+        <activity
             android:name=".SplashScreen"
             android:exported="true"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
@@ -47,5 +50,7 @@
         </service>
         <receiver android:name=".notification.NotificationReceiver"/>
     </application>
-
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.HIGH_SAMPLING_RATE_SENSORS"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
 </manifest>

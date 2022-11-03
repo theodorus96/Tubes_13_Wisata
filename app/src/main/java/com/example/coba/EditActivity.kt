@@ -6,7 +6,10 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.coba.camera.MainCamera
+import com.example.coba.map.MainMap
 import com.example.coba.room.User
 import com.example.coba.room.UserDB
 
@@ -43,7 +46,7 @@ class EditActivity : AppCompatActivity() {
         username.setText(user.username)
         email.setText(user.email)
         bornDate.setText(user.borndate)
-        phoneNum.setText(user.nama)
+        phoneNum.setText(user.phoneNum)
     }
 
     private fun setupListener() {
@@ -56,7 +59,12 @@ class EditActivity : AppCompatActivity() {
         val bornDate: EditText = findViewById(R.id.etBornDate)
         val phoneNum: EditText = findViewById(R.id.etPhoneNumber)
         val btnSave: Button = findViewById(R.id.btnSave)
+        val photo: ImageView = findViewById(R.id.photo)
 
+        photo.setOnClickListener {
+            val photo = Intent(this, MainCamera::class.java)
+            startActivity(photo)
+        }
 
         btnSave.setOnClickListener {
 
@@ -74,6 +82,7 @@ class EditActivity : AppCompatActivity() {
 
             startActivity(intent)
         }
+
     }
 
     override fun onSupportNavigateUp(): Boolean {
