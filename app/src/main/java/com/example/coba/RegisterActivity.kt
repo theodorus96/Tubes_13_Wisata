@@ -10,13 +10,25 @@ import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.view.WindowManager
+import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.android.volley.AuthFailureError
+import com.android.volley.RequestQueue
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
+import com.example.coba.api.UserApi
 import com.example.coba.databinding.ActivityRegisterBinding
-import com.example.coba.notification.NotificationReceiver
-import com.example.coba.room.User
+import com.example.coba.models.User
 import com.example.coba.room.UserDB
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_register.*
+import org.json.JSONObject
+import java.nio.charset.StandardCharsets
 
 
 class RegisterActivity : AppCompatActivity() {
@@ -28,17 +40,14 @@ class RegisterActivity : AppCompatActivity() {
     //private var binding: ActivityRegisterBinding? = null
     private val CHANNEL_ID_1 = "channel_notification_01"
     private val notificationId1 = 101
-
-
+    private var queue: RequestQueue? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        queue = Volley.newRequestQueue(this)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding!!.btnRegister.setOnClickListener {
-            sendNotifiaction()
-        }
+        createNotificationChannel()
 
         binding.btnRegister.setOnClickListener{
             val intent = Intent(this,MainActivity::class.java)
@@ -76,17 +85,18 @@ class RegisterActivity : AppCompatActivity() {
                 checkRegister = false
             }
             if(checkRegister==true) {
-                val nama = binding.etName.text.toString()
-                val bornDate = binding.etBornDate.text.toString()
-                val email = binding.etEmail.text.toString()
-                val phoneNum = binding.etPhoneNumber.text.toString()
-                val username = binding.etUsername.text.toString()
-                val password = binding.etPassword.text.toString()
-                println(nama+username+password)
-                val user = User(0,nama,bornDate,email, phoneNum, username ,password)
-                createNotificationChannel()
-                sendNotifiaction()
-                db.userDao().addUser(user)
+//                val nama = binding.etName.text.toString()
+//                val bornDate = binding.etBornDate.text.toString()
+//                val email = binding.etEmail.text.toString()
+//                val phoneNum = binding.etPhoneNumber.text.toString()
+//                val username = binding.etUsername.text.toString()
+//                val password = binding.etPassword.text.toString()
+//                println(nama+username+password)
+//                val user = User(0,nama,bornDate,email, phoneNum, username ,password)
+                createUser()
+
+
+//                db.userDao().addUser(user)
                 //val sp=getSharedPreferences("USER_LOGIN", Context.MODE_PRIVATE)
 //                val editor=sp.edit()
 //
@@ -95,7 +105,7 @@ class RegisterActivity : AppCompatActivity() {
 //                    putString("username",user.username)
 //                    putString("password",user.password)
 //                }.apply()
-
+//
                 mBundle.putString("nama", binding.etName.text.toString())
                 mBundle.putString("username", binding.etUsername.text.toString())
                 mBundle.putString("password", binding.etPassword.text.toString())
@@ -108,6 +118,65 @@ class RegisterActivity : AppCompatActivity() {
             }
 
         }
+    }
+    private fun createUser(){
+        val user = User(
+            binding.etName.text.toString(),
+            binding.etBornDate.text.toString(),
+            binding.etEmail.text.toString(),
+            binding.etPhoneNumber.text.toString(),
+            binding.etUsername.text.toString(),
+            binding.etPassword.text.toString()
+        )
+        val stringRequest: StringRequest =
+            object: StringRequest(Method.POST, UserApi.ADD_URL, Response.Listener { response ->
+                val gson = Gson()
+                var user = gson.fromJson(response, User::class.java)
+
+                if(user != null)
+                    Toast.makeText(this@RegisterActivity, "Data berhasil ditambahkan", Toast.LENGTH_SHORT).show()
+
+                val returnIntent = Intent()
+                setResult(RESULT_OK, returnIntent)
+                finish()
+                //sendNotifiaction()
+
+            }, Response.ErrorListener { error ->
+
+                try{
+                    val responseBody = String(error.networkResponse.data, StandardCharsets.UTF_8)
+                    val errors = JSONObject(responseBody)
+                    Toast.makeText(
+                        this,
+                        errors.getString("message"),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } catch (e: Exception){
+                    Toast.makeText(this@RegisterActivity, e.message, Toast.LENGTH_SHORT).show()
+                }
+            }){
+                @Throws(AuthFailureError::class)
+                override fun getHeaders(): Map<String, String> {
+                    val headers = HashMap<String, String>()
+                    headers["Accept"] = "application/json"
+                    return headers
+                }
+
+                @Throws(AuthFailureError::class)
+                override fun getParams(): MutableMap<String, String> {
+                    val params = HashMap<String, String>()
+                    params["name"] = user.nama
+                    params["bornDate"] = user.borndate
+                    params["email"] = user.email
+                    params["phoneNum"] = user.phoneNum
+                    params["username"] = user.username
+                    params["password"] = user.password
+                    return params
+                }
+            }
+
+        queue!!.add(stringRequest)
+
     }
 
     //notifikasi
@@ -150,6 +219,7 @@ class RegisterActivity : AppCompatActivity() {
         with(NotificationManagerCompat.from(this)){
             notify(notificationId1,builder.build())
         }
-
     }
+
+
 }
