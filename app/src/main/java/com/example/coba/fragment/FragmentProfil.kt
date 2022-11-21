@@ -9,13 +9,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.Toast
+import com.android.volley.AuthFailureError
+import com.android.volley.RequestQueue
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.example.coba.EditActivity
 import com.example.coba.HomeActivity
 import com.example.coba.R
+import com.example.coba.api.UserApi
 import com.example.coba.databinding.FragmentProfilBinding
-import com.example.coba.room.User
+import com.example.coba.models.User
 import com.example.coba.room.UserDB
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_profil.*
+import org.json.JSONObject
+import java.nio.charset.StandardCharsets
 
 
 class FragmentProfil : Fragment(R.layout.fragment_profil) {
@@ -25,6 +35,7 @@ class FragmentProfil : Fragment(R.layout.fragment_profil) {
     private lateinit var userDB: UserDB
     val db by lazy { UserDB(activity as HomeActivity) }
     private var UserId: Int = 0
+    private var queue: RequestQueue? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,12 +47,18 @@ class FragmentProfil : Fragment(R.layout.fragment_profil) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUser(view)
+        queue = Volley.newRequestQueue(requireActivity())
         btnUpdate.setOnClickListener {
 //            (activity as HomeActivity).changeActivity(EditActivity::class.java)
             val intent  = Intent(this.requireActivity(),EditActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        setUser(requireView())
     }
 
     fun setUser(view: View) {
@@ -53,13 +70,45 @@ class FragmentProfil : Fragment(R.layout.fragment_profil) {
         sharedPreferences = activity?.getSharedPreferences("USER_LOGIN", Context.MODE_PRIVATE)
         val id = sharedPreferences!!.getInt("id",0)
 
+        val stringRequest: StringRequest = object :
+            StringRequest(
+                Method.GET, UserApi.GET_BY_ID_URL + id,
+                Response.Listener { response ->
+                    val gson = Gson()
+                    val json = JSONObject(response)
+                    var user = gson.fromJson(json.getJSONArray("data")[0].toString(), User::class.java)
 
-        val user: User = db.userDao().getUser(id)!!
-        namaLengkap.setText(user.nama)
-        username.setText(user.username)
-        email.setText(user.email)
-        bornDate.setText(user.borndate)
-        phoneNum.setText(user.phoneNum)
+                    namaLengkap.setText(user.nama)
+                    username.setText(user.username)
+                    email.setText(user.email)
+                    bornDate.setText(user.borndate)
+                    phoneNum.setText(user.phoneNum)
+
+                    Toast.makeText(requireActivity(),"Data berhasil diambil", Toast.LENGTH_SHORT).show()
+
+                },
+                Response.ErrorListener{ error ->
+
+                    try{
+                        val responseBody = String(error.networkResponse.data, StandardCharsets.UTF_8)
+                        val errors = JSONObject(responseBody)
+                        Toast.makeText(
+                            requireActivity(),
+                            errors.getString("message"),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } catch (e: Exception){
+                        Toast.makeText(requireActivity() ,e.message, Toast.LENGTH_SHORT).show()
+                    }
+                }) {
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Accept"] = "application/json"
+                return headers
+            }
+        }
+        queue!!.add(stringRequest)
 
     }
 

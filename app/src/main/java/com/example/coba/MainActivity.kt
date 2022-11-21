@@ -72,37 +72,32 @@ class MainActivity : AppCompatActivity() {
 //                    editor.apply {
 //                        putInt("id", users.id)
 //                        putString("username", users.username)
-//                        putString("password", users.password)
-//                    }.apply()
-
-//                    startActivity(moveHome)
+////                        putString("password", users.password)
+////                    }.apply()
+//
+////                    startActivity(moveHome)
 
                 val stringRequest: StringRequest = object :
-                    StringRequest(Method.GET, UserApi.GET_ALL_URL,
+                    StringRequest(Method.POST, UserApi.LOGIN_URL,
                         Response.Listener { response ->
                             val gson = Gson()
 
                             val jsonObject = JSONObject(response)
-                            val dataArray = jsonObject.getJSONArray("data")
-                            val users = gson.fromJson(dataArray.toString(), Array<User>::class.java)
-                                .toList()
+                            val data = jsonObject.getJSONObject("data")
+                            val user = gson.fromJson(data.toString(), User::class.java)
 
-                            for (user in users) {
-                                if (user.username == username && user.password == password) {
-                                    val moveHome =
-                                        Intent(this@MainActivity, HomeActivity::class.java)
-                                    val sp =
-                                        getSharedPreferences("USER_LOGIN", Context.MODE_PRIVATE)
-                                    val editor = sp.edit()
+                            val moveHome = Intent(this@MainActivity, HomeActivity::class.java)
+                            val sp = getSharedPreferences("USER_LOGIN", Context.MODE_PRIVATE)
+                            val editor = sp.edit()
 
-                                    editor.apply {
-                                        editor.putString("username", user.username)
-                                        editor.putString("password", user.password)
-                                    }.apply()
+                            editor.apply {
+                                putInt("id", user.id!!.toInt())
+                                putString("username", user.username)
+                                putString("password", user.password)
+                            }.apply()
 
-                                    startActivity(moveHome)
-                                }
-                            }
+                            startActivity(moveHome)
+                            finish()
                         }, Response.ErrorListener { error ->
 
                             try {
@@ -124,6 +119,14 @@ class MainActivity : AppCompatActivity() {
                         val headers = java.util.HashMap<String, String>()
                         headers["Accept"] = "application/json"
                         return headers
+                    }
+
+                    @Throws(AuthFailureError::class)
+                    override fun getParams(): MutableMap<String, String> {
+                        val params = HashMap<String, String>()
+                        params["username"] = username
+                        params["password"] = password
+                        return params
                     }
 
                 }

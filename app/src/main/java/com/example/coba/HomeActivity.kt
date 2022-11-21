@@ -22,19 +22,20 @@ class HomeActivity : AppCompatActivity() {
         //loadFragment(FragmentHome())
         changeFragment(FragmentHome())
         bottomNav= findViewById(R.id.bottom_navigation) as BottomNavigationView
-        bottomNav.setOnNavigationItemReselectedListener {
+        bottomNav.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.profil -> {
                     changeFragment(FragmentProfil())
-                    return@setOnNavigationItemReselectedListener
+                    return@setOnNavigationItemSelectedListener true
                 }
                 R.id.wisata -> {
                     changeFragment(FragmentWisata())
-                    return@setOnNavigationItemReselectedListener
+                    return@setOnNavigationItemSelectedListener true
                 }
                 R.id.map -> {
                     val moveMap = Intent(this@HomeActivity, MainMap::class.java)
                     startActivity(moveMap)
+                    return@setOnNavigationItemSelectedListener true
                 }
                 R.id.menu_exit -> {
                     val builder: AlertDialog.Builder = AlertDialog.Builder(this@HomeActivity)
@@ -50,6 +51,11 @@ class HomeActivity : AppCompatActivity() {
                             }
                         })
                         .show()
+                    return@setOnNavigationItemSelectedListener true
+                }
+                else -> {
+                    changeFragment(FragmentHome())
+                    return@setOnNavigationItemSelectedListener true
                 }
             }
         }

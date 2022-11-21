@@ -14,6 +14,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.android.volley.AuthFailureError
@@ -106,15 +107,15 @@ class RegisterActivity : AppCompatActivity() {
 //                    putString("password",user.password)
 //                }.apply()
 //
-                mBundle.putString("nama", binding.etName.text.toString())
-                mBundle.putString("username", binding.etUsername.text.toString())
-                mBundle.putString("password", binding.etPassword.text.toString())
-                mBundle.putString("email", binding.etEmail.text.toString())
-                mBundle.putString("bornDate", binding.etBornDate.text.toString())
-                mBundle.putString("phone", binding.etPhoneNumber.text.toString())
-
-                intent.putExtra("register",mBundle)
-                startActivity(intent)
+//                mBundle.putString("nama", binding.etName.text.toString())
+//                mBundle.putString("username", binding.etUsername.text.toString())
+//                mBundle.putString("password", binding.etPassword.text.toString())
+//                mBundle.putString("email", binding.etEmail.text.toString())
+//                mBundle.putString("bornDate", binding.etBornDate.text.toString())
+//                mBundle.putString("phone", binding.etPhoneNumber.text.toString())
+//
+//                intent.putExtra("register",mBundle)
+//                startActivity(intent)
             }
 
         }
@@ -130,16 +131,13 @@ class RegisterActivity : AppCompatActivity() {
         )
         val stringRequest: StringRequest =
             object: StringRequest(Method.POST, UserApi.ADD_URL, Response.Listener { response ->
-                val gson = Gson()
-                var user = gson.fromJson(response, User::class.java)
 
-                if(user != null)
-                    Toast.makeText(this@RegisterActivity, "Data berhasil ditambahkan", Toast.LENGTH_SHORT).show()
-
+                Toast.makeText(this@RegisterActivity, "Data berhasil ditambahkan", Toast.LENGTH_SHORT).show()
+                sendNotifiaction()
                 val returnIntent = Intent()
                 setResult(RESULT_OK, returnIntent)
                 finish()
-                //sendNotifiaction()
+
 
             }, Response.ErrorListener { error ->
 
@@ -165,12 +163,13 @@ class RegisterActivity : AppCompatActivity() {
                 @Throws(AuthFailureError::class)
                 override fun getParams(): MutableMap<String, String> {
                     val params = HashMap<String, String>()
-                    params["name"] = user.nama
-                    params["bornDate"] = user.borndate
+                    params["nama"] = user.nama
+                    params["borndate"] = user.borndate
                     params["email"] = user.email
                     params["phoneNum"] = user.phoneNum
                     params["username"] = user.username
                     params["password"] = user.password
+
                     return params
                 }
             }
@@ -200,7 +199,7 @@ class RegisterActivity : AppCompatActivity() {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
 
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(this,0, intent,0)
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(this,0, intent, PendingIntent.FLAG_IMMUTABLE)
         val bitmap = BitmapFactory.decodeResource(resources, R.drawable.hiling)
 
         val builder = NotificationCompat.Builder(this, CHANNEL_ID_1)

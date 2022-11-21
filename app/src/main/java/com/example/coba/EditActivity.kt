@@ -36,9 +36,10 @@ class EditActivity : AppCompatActivity() {
         getSupportActionBar()?.hide()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit)
+        queue = Volley.newRequestQueue(this)
+
         setupListener()
         //setUser()
-        queue = Volley.newRequestQueue(this)
 
     }
 
@@ -64,7 +65,7 @@ class EditActivity : AppCompatActivity() {
 //    }
 
     private fun setupListener() {
-        val id = intent.getLongExtra("id", -1)
+        val id = getSharedPreferences("USER_LOGIN", Context.MODE_PRIVATE).getInt("id",0).toLong()
         getUserById(id)
         val btnSave: Button = findViewById(R.id.btnSave)
         val photo: ImageView = findViewById(R.id.photo)
@@ -75,7 +76,7 @@ class EditActivity : AppCompatActivity() {
         }
 
         btnSave.setOnClickListener {
-            updateMahasiswa(id)
+            updateUser(id)
  //           db.userDao().updateUser(
 //                User(
 //                    UserId,
@@ -88,7 +89,7 @@ class EditActivity : AppCompatActivity() {
 //                )
           //  )
 
-            startActivity(intent)
+//            startActivity(intent)
         }
 
     }
@@ -111,14 +112,17 @@ class EditActivity : AppCompatActivity() {
             StringRequest(
                 Method.GET, UserApi.GET_BY_ID_URL + id,
                 Response.Listener { response ->
-                    val user = Gson().fromJson(response, User::class.java)
-                    namaLengkap!!.setText(user.nama)
-                    username!!.setText(user.username)
-                    email!!.setText(user.email)
-                    bornDate!!.setText(user.borndate)
-                    phoneNum!!.setText(user.phoneNum)
+                    val gson = Gson()
+                    val json = JSONObject(response)
+                    var user = gson.fromJson(json.getJSONArray("data")[0].toString(), User::class.java)
 
-                    Toast.makeText(this@EditActivity,"Data berhasil diambil", Toast.LENGTH_SHORT).show()
+                    namaLengkap.setText(user.nama)
+                    username.setText(user.username)
+                    email.setText(user.email)
+                    bornDate.setText(user.borndate)
+                    phoneNum.setText(user.phoneNum)
+
+                    Toast.makeText(this,"Data berhasil diambil", Toast.LENGTH_SHORT).show()
 
                 },
                 Response.ErrorListener{ error ->
@@ -146,7 +150,7 @@ class EditActivity : AppCompatActivity() {
 
     }
 
-    private fun updateMahasiswa(id: Long){
+    private fun updateUser(id: Long){
         val namaLengkap: EditText = findViewById(R.id.etName)
         val username: EditText = findViewById(R.id.etUsername)
         val email: EditText = findViewById(R.id.etEmail)
@@ -164,9 +168,9 @@ class EditActivity : AppCompatActivity() {
         val stringRequest: StringRequest =
             object: StringRequest(Method.PUT, UserApi.UPDATE_URL + id, Response.Listener { response ->
                 val gson = Gson()
-                var mahasiswa = gson.fromJson(response, User::class.java)
+                var user = gson.fromJson(response, User::class.java)
 
-                if(mahasiswa != null)
+                if(user != null)
                     Toast.makeText(this@EditActivity, "Data berhasil diubah", Toast.LENGTH_SHORT).show()
 
                 val returnIntent = Intent()
@@ -196,10 +200,14 @@ class EditActivity : AppCompatActivity() {
                 }
 
                 @Throws(AuthFailureError::class)
-                override fun getBody(): ByteArray {
-                    val gson = Gson()
-                    val requestBody = gson.toJson(user)
-                    return requestBody.toByteArray(StandardCharsets.UTF_8)
+                override fun getParams(): MutableMap<String, String> {
+                    val params = HashMap<String, String>()
+                    params["nama"] = user.nama
+                    params["borndate"] = user.borndate
+                    params["email"] = user.email
+                    params["phoneNum"] = user.phoneNum
+                    params["username"] = user.username
+                    return params
                 }
 
                 override fun getBodyContentType(): String {
