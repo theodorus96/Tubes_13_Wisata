@@ -2,22 +2,30 @@ package com.example.coba
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import kotlinx.coroutines.Runnable
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.android.volley.AuthFailureError
+import com.android.volley.RequestQueue
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
+import com.example.coba.Volley.WisataApi
 import com.example.coba.room.UserDB
-import com.example.coba.room.Wisata
+import com.example.coba.models.Wisata
+import com.google.gson.Gson
+import kotlinx.android.synthetic.main.activity_edit_wisata.*
+import org.json.JSONObject
+import java.nio.charset.StandardCharsets
 
 class EditWisataActivity : AppCompatActivity() {
     val db by lazy{UserDB(this)}
@@ -26,10 +34,13 @@ class EditWisataActivity : AppCompatActivity() {
     private val notificationId1 = 101
     private val CHANNEL_ID_2 = "channel_notification_02"
     private val notificationId2 = 102
+    private var queue: RequestQueue? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         getSupportActionBar()?.hide()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_wisata)
+        queue = Volley.newRequestQueue(this)
         setupView()
         setupListener()
     }
@@ -51,6 +62,156 @@ class EditWisataActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun createWisata(){
+
+        val wisata = Wisata(
+            edit_title!!.text.toString(),
+            edit_wisata!!.text.toString(),
+        )
+        val stringRequest: StringRequest =
+            object: StringRequest(Method.POST, WisataApi.ADD_URL, Response.Listener { response->
+                val gson = Gson()
+                val wisata = gson.fromJson(response, Wisata::class.java)
+
+                if(wisata!=null)
+                    Toast.makeText(this@EditWisataActivity, "Data Berhasil Ditambahkan", Toast.LENGTH_SHORT).show()
+
+                val returnIntent = Intent()
+                setResult(RESULT_OK, returnIntent)
+                finish()
+
+            }, Response.ErrorListener { error->
+
+                try{
+                    val responseBody = String(error.networkResponse.data, StandardCharsets.UTF_8)
+                    val errors = JSONObject(responseBody)
+                    Toast.makeText(
+                        this@EditWisataActivity,
+                        errors.getString("message"),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }catch (e:Exception){
+                    Toast.makeText(this@EditWisataActivity, e.message, Toast.LENGTH_SHORT).show()
+                }
+            }) {
+                @Throws(AuthFailureError::class)
+                override fun getHeaders(): MutableMap<String, String> {
+                    val headers = HashMap<String, String>()
+                    headers["Accept"] = "application/json"
+                    return headers
+
+                }
+
+                @Throws(AuthFailureError::class)
+                override fun getParams(): MutableMap<String, String> {
+                    val params = HashMap<String, String>()
+                    params["nama"] = wisata.namaWisata
+                    params["lokasi"] = wisata.lokasiWisata
+
+                    return params
+                }
+
+                override fun getBodyContentType(): String {
+                    return "application/json"
+                }
+            }
+        // Menambahkan request ke request queue
+        queue!!.add(stringRequest)
+    }
+
+    private fun getWisataById(id: Long){
+        // Fungsi untuk menampilkan data wisata berdasarkan id
+
+        val stringRequest: StringRequest =
+            object : StringRequest(Method.GET, WisataApi.GET_BY_ID_URL + id, Response.Listener { response ->
+                val gson = Gson()
+                val wisata = gson.fromJson(response, Wisata::class.java)
+
+                edit_title!!.setText(wisata.namaWisata)
+                edit_wisata!!.setText(wisata.lokasiWisata)
+
+                Toast.makeText(this@EditWisataActivity, "Data berhasil diambil", Toast.LENGTH_SHORT).show()
+            },  Response.ErrorListener { error ->
+                try{
+                    val responseBody = String(error.networkResponse.data, StandardCharsets.UTF_8)
+                    val errors = JSONObject(responseBody)
+                    Toast.makeText(
+                        this@EditWisataActivity,
+                        errors.getString("message"),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }catch (e: Exception){
+                    Toast.makeText(this@EditWisataActivity, e.message, Toast.LENGTH_SHORT).show()
+                }
+            }){
+                @Throws(AuthFailureError::class)
+                override fun getHeaders(): MutableMap<String, String> {
+                    val headers = HashMap<String, String>()
+                    headers["Accept"] = "application/json"
+                    return headers
+                }
+            }
+        queue!!.add(stringRequest)
+    }
+
+    private fun updateWisata(id: Long){
+
+        val wisata = Wisata(
+            edit_title!!.text.toString(),
+            edit_wisata!!.text.toString(),
+        )
+
+        val stringRequest: StringRequest = object :
+            StringRequest(Method.PUT, WisataApi.UPDATE_URL + id, Response.Listener{ response ->
+                val gson = Gson()
+
+                val wisata = gson.fromJson(response, Wisata::class.java)
+
+                if(wisata != null)
+                    Toast.makeText(this@EditWisataActivity, "Data Berhasil Diupdate", Toast.LENGTH_SHORT).show()
+                val returnIntent = Intent()
+                setResult(RESULT_OK, returnIntent)
+                finish()
+
+            }, Response.ErrorListener{ error->
+                try{
+                    val responseBody = String(error.networkResponse.data, StandardCharsets.UTF_8)
+                    val errors = JSONObject(responseBody)
+                    Toast.makeText(
+                        this@EditWisataActivity,
+                        errors.getString("message"),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }catch (e:Exception){
+                    Toast.makeText(this@EditWisataActivity, e.message, Toast.LENGTH_SHORT).show()
+                }
+            }){
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Accept"] = "application/json"
+                return headers
+
+            }
+
+            @Throws(AuthFailureError::class)
+            override fun getParams(): MutableMap<String, String> {
+                val params = HashMap<String, String>()
+                params["nama"] = wisata.namaWisata
+                params["lokasi"] = wisata.lokasiWisata
+
+                return params
+            }
+
+            override fun getBodyContentType(): String {
+                return "application/json"
+            }
+        }
+        queue!!.add(stringRequest)
+
+    }
+
     fun setWisata(){
         val namaWisata : EditText = findViewById(R.id.edit_title)
         val lokasiWisata : EditText = findViewById(R.id.edit_wisata)
@@ -69,18 +230,19 @@ class EditWisataActivity : AppCompatActivity() {
 
         val namaWisata : EditText = findViewById(R.id.edit_title)
         val lokasiWisata : EditText = findViewById(R.id.edit_wisata)
-
+        val id = intent.getLongExtra("id", -1)
         val btnSave : Button = findViewById(R.id.button_save)
         val btnUpdate: Button = findViewById(R.id.button_update)
-
+        getWisataById(id)
+        createNotificationChannel()
         btnSave.setOnClickListener {
             println(namaWisata.text.toString())
             println(lokasiWisata.text.toString())
+            createWisata()
+//            db.WisataDAO().addWisata(
+//                Wisata(0,namaWisata.text.toString(),lokasiWisata.text.toString())
+//            )
 
-            db.WisataDAO().addWisata(
-                Wisata(0,namaWisata.text.toString(),lokasiWisata.text.toString())
-            )
-            createNotificationChannel()
             sendNotifiaction()
             sendNotification2()
             startActivity(intent)
@@ -90,10 +252,10 @@ class EditWisataActivity : AppCompatActivity() {
             println(namaWisata.text.toString())
             println(lokasiWisata.text.toString())
 
-            db.WisataDAO().updateWisata(
-                Wisata(WisataId,namaWisata.text.toString(),lokasiWisata.text.toString())
-            )
-
+//            db.WisataDAO().updateWisata(
+//                Wisata(WisataId,namaWisata.text.toString(),lokasiWisata.text.toString())
+//            )
+            updateWisata(id)
             startActivity(intent)
         }
     }
