@@ -2,23 +2,40 @@ package com.example.coba.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import androidx.fragment.app.Fragment
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
+import com.android.volley.AuthFailureError
+import com.android.volley.RequestQueue
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.coba.EditWisataActivity
 import com.example.coba.R
+import com.example.coba.api.UserApi
 import com.example.coba.RVWisataAdapter
+import com.example.coba.api.WisataApi
 import com.example.coba.room.Wisata
 import com.example.coba.room.UserDB
 
+import com.google.gson.Gson
+import kotlinx.android.synthetic.main.fragment_profil.*
+import kotlinx.android.synthetic.main.fragment_wisata.*
+import org.json.JSONObject
+import java.nio.charset.StandardCharsets
+
 class FragmentWisata : Fragment() {
-    private val db by lazy {
-        UserDB(requireActivity())
-    }
+    private var _binding: FragmentWisata? = null
+    private val binding get() = _binding!!
+    private var queue: RequestQueue? = null
+//    private val db by lazy {
+//        UserDB(requireActivity())
+//    }
 
     private val adapter : RVWisataAdapter = RVWisataAdapter(arrayListOf(), object : RVWisataAdapter.onAdapterListener{
 
@@ -63,9 +80,18 @@ class FragmentWisata : Fragment() {
         loadData()
         rvWisata.adapter = adapter
     }
+    val rvWisata = binding.rv_wisata
 
-    fun deleteDialog(wisata: Wisata){
-        db.WisataDAO().deleteWisata(wisata)
+    fun deleteDialog(id: Int){
+        val stringRequest: StringRequest = object :
+           /* StringRequest(
+                Method.DELETE, WisataApi.DELETE_URL + id,
+                Response.Listener { response ->
+                    val gson = Gson()
+
+                }
+            )/*
+
     }
     fun setupListener(){
         val btnAdd= requireActivity().findViewById<Button>(R.id.button_add)
