@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.fragment.app.Fragment
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.Toast
 import com.android.volley.AuthFailureError
@@ -20,16 +21,17 @@ import com.example.coba.R
 import com.example.coba.api.UserApi
 import com.example.coba.RVWisataAdapter
 import com.example.coba.api.WisataApi
-import com.example.coba.room.Wisata
+//import com.example.coba.room.Wisata
 import com.example.coba.room.UserDB
+import com.example.coba.models.Wisata
 
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.fragment_profil.*
 import kotlinx.android.synthetic.main.fragment_wisata.*
 import org.json.JSONObject
 import java.nio.charset.StandardCharsets
 
 class FragmentWisata : Fragment() {
+//    private var layoutLoading: LinearLayout? = null
     private var _binding: FragmentWisata? = null
     private val binding get() = _binding!!
     private var queue: RequestQueue? = null
@@ -59,7 +61,7 @@ class FragmentWisata : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        setupListener()
+
     }
 
     fun loadData(){
@@ -82,7 +84,45 @@ class FragmentWisata : Fragment() {
     }
     val rvWisata = binding.rv_wisata
 
+    private fun allwisata(){
+        binding.srWisata.isRefreshing = true
+        val stringRequest: StringRequest = object :
+        StringRequest(Method.GET, WisataApi.GET_ALL_URL, Response.Listener {  response ->
+            val gson = Gson()
+            val wisata : Array<Wisata> = gson.fromJson(response, Array<Wisata>::class.java)
+            val jsonObject = JSONObject(response)
+            val jsonArray = jsonObject.getJSONArray("data")
+
+            adapter!!.setWisataList(wisata)
+            adapter!!.filter.filter(svWisata!!.query)
+            srWisata!!.isRefreshing = false
+            if (!wisata.isEmpty())
+                Toast.makeText(requireContext(), "Data berhasil diambil", Toast.LENGTH_SHORT).show()
+            else
+                Toast.makeText(requireContext(), "Data Kosong", Toast.LENGTH_SHORT).show()
+        },Response.ErrorListener { error ->
+            try{
+                val responseBody = String(error.networkResponse.data, StandardCharsets.UTF_8)
+                val errors = JSONObject(responseBody)
+                Toast.makeText(
+                    requireContext(),
+                    errors.getString("message"),
+                    Toast.LENGTH_SHORT
+                ).show()
+            } catch (e:Exception){
+                Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+            }
+        }){
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Accept"] = "application/json"
+                return headers
+            }}
+        queue!!.add(stringRequest)
+    }
     fun deleteDialog(id: Int){
+//        setLoading(true)
         val stringRequest: StringRequest = object :
             StringRequest(
                 Method.DELETE, WisataApi.DELETE_URL + id,
@@ -91,7 +131,9 @@ class FragmentWisata : Fragment() {
                     val json = JSONObject(response)
                     val wisata = gson.fromJson(response, Wisata::class.java)
 
+                    if(wisata != null)
                     Toast.makeText(requireContext(), "Data berhasil diambil", Toast.LENGTH_SHORT).show()
+                    allwisata()
                 }, Response.ErrorListener { error ->
                     try{
                         val responseBody = String(error.networkResponse.data, StandardCharsets.UTF_8)
@@ -111,15 +153,23 @@ class FragmentWisata : Fragment() {
                         headers["Accept"] = "application/json"
                         return headers
                     }}
-                queue!!.add(stringRequest)
+        queue!!.add(stringRequest)
 
     }
-    fun setupListener(){
-        val btnAdd= requireActivity().findViewById<Button>(R.id.button_add)
-        btnAdd.setOnClickListener {
-            intentEdit(0,1)
-        }
-    }
+
+//    private fun setLoading(isLoading: Boolean){
+//        if(isLoading){
+//            requireActivity().window.setFlags(
+//                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+//                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+//            )
+//                binding.layoutLoading.visibility = View.VISIBLE
+//        }else{
+//           requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+//            binding.layoutLoading.visibility = View.GONE
+//        }
+//    }
+
     fun intentEdit(id : Int,intentType: Int){
         startActivity(
             Intent(requireActivity(),EditWisataActivity::class.java)
