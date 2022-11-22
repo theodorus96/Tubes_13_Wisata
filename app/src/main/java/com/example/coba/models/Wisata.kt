@@ -1,5 +1,5 @@
 package com.example.coba.models
 
-class Wisata (var namaWisata: String, var lokasiWisata: String){ 
+class Wisata (var nama: String, var lokasi: String){
     var id: Long? = null
 }

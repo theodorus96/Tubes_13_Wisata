@@ -19,7 +19,6 @@ class HomeActivity : AppCompatActivity() {
         getSupportActionBar()?.hide()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-        //loadFragment(FragmentHome())
         changeFragment(FragmentHome())
         bottomNav= findViewById(R.id.bottom_navigation) as BottomNavigationView
         bottomNav.setOnNavigationItemSelectedListener {
@@ -61,12 +60,6 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-//    override fun onCreateOptionsMenu(menu : Menu): Boolean{
-//        val menuInflater = MenuInflater(this)
-//        menuInflater.inflate(R.menu.home_menu,menu)
-//        return true
-//    }
-
     fun changeFragment(fragment: Fragment?){
         if(fragment != null){
             getSupportFragmentManager()
@@ -75,40 +68,4 @@ class HomeActivity : AppCompatActivity() {
                 .commit()
         }
     }
-
-//    fun changeActivity(activity: Class<*>) {
-//        val intent = Intent(this, activity)
-//        startActivity(intent)
-//    }
-
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        if(item.itemId == R.id.wisata){
-//            changeFragment(FragmentWisata())
-//        }
-//        if(item.itemId == R.id.profil) {
-//            changeFragment(FragmentProfil())
-//        }else {
-//            val builder: AlertDialog.Builder = AlertDialog.Builder(this@HomeActivity)
-//            builder.setMessage("Are you sure want to exit?")
-//                .setNegativeButton("YES", object : DialogInterface.OnClickListener {
-//                    override fun onClick(dialogInterface: DialogInterface, i:Int){
-//                        val logout = Intent(this@HomeActivity, MainActivity::class.java)
-//                        startActivity(logout)
-//                        finishAndRemoveTask()
-//                    }
-//                }).setPositiveButton("No", object : DialogInterface.OnClickListener {
-//                    override fun onClick(dialogInterface: DialogInterface, i:Int){
-//                    }
-//                })
-//                .show()
-//        }
-//        return super.onOptionsItemSelected(item)
-//    }
-
-//    private  fun loadFragment(fragment: Fragment){
-//        val transaction = supportFragmentManager.beginTransaction()
-//        transaction.replace(R.id.flFragment,fragment)
-//        transaction.addToBackStack(null)
-//        transaction.commit()
-//    }
 }

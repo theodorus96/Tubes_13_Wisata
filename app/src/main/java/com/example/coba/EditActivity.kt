@@ -16,7 +16,6 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.coba.api.UserApi
 import com.example.coba.camera.MainCamera
-import com.example.coba.map.MainMap
 import com.example.coba.models.User
 import com.example.coba.room.UserDB
 import com.google.gson.Gson
@@ -39,30 +38,7 @@ class EditActivity : AppCompatActivity() {
         queue = Volley.newRequestQueue(this)
 
         setupListener()
-        //setUser()
-
     }
-
-
-
-//    fun setUser() {
-//        val namaLengkap: EditText = findViewById(R.id.etName)
-//        val username: EditText = findViewById(R.id.etUsername)
-//        val email: EditText = findViewById(R.id.etEmail)
-//        val bornDate: EditText = findViewById(R.id.etBornDate)
-//        val phoneNum: EditText = findViewById(R.id.etPhoneNumber)
-//
-//        sharedPreferences = getSharedPreferences("USER_LOGIN", Context.MODE_PRIVATE)
-//
-//        UserId = sharedPreferences!!.getInt("id",0)
-////        val user: User = db.userDao().getUser(UserId)!!
-//        password = user.password
-//        namaLengkap.setText(user.nama)
-//        username.setText(user.username)
-//        email.setText(user.email)
-//        bornDate.setText(user.borndate)
-//        phoneNum.setText(user.phoneNum)
-//    }
 
     private fun setupListener() {
         val id = getSharedPreferences("USER_LOGIN", Context.MODE_PRIVATE).getInt("id",0).toLong()
@@ -77,19 +53,6 @@ class EditActivity : AppCompatActivity() {
 
         btnSave.setOnClickListener {
             updateUser(id)
- //           db.userDao().updateUser(
-//                User(
-//                    UserId,
-//                    namaLengkap.text.toString(),
-//                    bornDate.text.toString(),
-//                    email.text.toString(),
-//                    phoneNum.text.toString(),
-//                    username.text.toString(),
-//                    password
-//                )
-          //  )
-
-//            startActivity(intent)
         }
 
     }
@@ -105,8 +68,6 @@ class EditActivity : AppCompatActivity() {
         val email: EditText = findViewById(R.id.etEmail)
         val bornDate: EditText = findViewById(R.id.etBornDate)
         val phoneNum: EditText = findViewById(R.id.etPhoneNumber)
-//        val btnSave: Button = findViewById(R.id.btnSave)
-//        val photo: ImageView = findViewById(R.id.photo)
 
         val stringRequest: StringRequest = object :
             StringRequest(

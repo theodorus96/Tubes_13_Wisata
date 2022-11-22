@@ -42,7 +42,6 @@ class MainActivity : AppCompatActivity() {
         val btnLogin: Button = findViewById(R.id.btnLogin)
         val btnRegister: Button = findViewById(R.id.btnRegister)
         queue = Volley.newRequestQueue(this)
-        //getBundle()
 
         btnRegister.setOnClickListener {
             val moveRegister = Intent(this@MainActivity, RegisterActivity::class.java)
@@ -61,21 +60,6 @@ class MainActivity : AppCompatActivity() {
                 inputPassword.setError("Password must be filled with text")
             }
             if (username.isEmpty() == false && password.isEmpty() == false) {
-                // val users = db.userDao().getUser(username, password)
-
-
-                // if (users != null) {
-//                    val moveHome = Intent(this@MainActivity, HomeActivity::class.java)
-//                    val sp = getSharedPreferences("USER_LOGIN", Context.MODE_PRIVATE)
-//                    val editor = sp.edit()
-//
-//                    editor.apply {
-//                        putInt("id", users.id)
-//                        putString("username", users.username)
-////                        putString("password", users.password)
-////                    }.apply()
-//
-////                    startActivity(moveHome)
 
                 val stringRequest: StringRequest = object :
                     StringRequest(Method.POST, UserApi.LOGIN_URL,
@@ -131,18 +115,10 @@ class MainActivity : AppCompatActivity() {
 
                 }
                 queue!!.add(stringRequest)
-                // }
+
             }
         })
     }
-//    fun getBundle(){
-//        val sp = getSharedPreferences("USER_LOGIN", Context.MODE_PRIVATE)
-//        val username = sp.getString("username","")
-//        val password = sp.getString("password","")
-//
-//        inputUsername.editText?.setText(username)
-//        inputPassword.editText?.setText(password)
-//    }
 
 
 }

@@ -41,7 +41,6 @@ class FragmentProfil : Fragment(R.layout.fragment_profil) {
         savedInstanceState: Bundle?
 
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profil, container, false)
     }
 
@@ -49,7 +48,6 @@ class FragmentProfil : Fragment(R.layout.fragment_profil) {
         super.onViewCreated(view, savedInstanceState)
         queue = Volley.newRequestQueue(requireActivity())
         btnUpdate.setOnClickListener {
-//            (activity as HomeActivity).changeActivity(EditActivity::class.java)
             val intent  = Intent(this.requireActivity(),EditActivity::class.java)
             startActivity(intent)
         }

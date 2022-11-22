@@ -42,7 +42,6 @@ class MainMap : AppCompatActivity(){
         getLocationMarker()
     }
 
-    //get lat long
     private fun getLocationMarker(){
         try {
             val stream = assets.open("sample_maps.json")

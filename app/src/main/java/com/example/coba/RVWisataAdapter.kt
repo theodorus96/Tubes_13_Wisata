@@ -20,9 +20,6 @@ class RVWisataAdapter(private val data: ArrayList<Wisata>, private var listener:
     override fun onBindViewHolder(holder: viewHolder,position: Int) {
         val currentItem = data[position]
         holder.bind(currentItem)
-//        holder.tvNamaWisata.text = currentItem.nama
-//        holder.tvLokasi.text = currentItem.lokasi
-//        holder.tvImageWisata.setImageResource(R.drawable.image_wakatobi)
 
         holder.icon_edit.setOnClickListener{
             listener.onUpdate(currentItem)
@@ -42,9 +39,7 @@ class RVWisataAdapter(private val data: ArrayList<Wisata>, private var listener:
     }
 
     class viewHolder(val binding: RvWisataBinding) : RecyclerView.ViewHolder(binding.root){
-//        val tvNamaWisata : TextView = itemView.findViewById(R.id.tv_nama_wisata)
-//        val tvLokasi : TextView = itemView.findViewById(R.id.tv_lokasi_wisata)
-//        val tvImageWisata : ImageView = itemView.findViewById(R.id.imageWisata)
+
         fun bind(wisata: Wisata){
             binding.wisata = wisata
         }

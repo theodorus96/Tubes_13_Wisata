@@ -34,7 +34,7 @@
                 <TextView
                     android:id="@+id/tv_nama_wisata"
                     style="@style/TextAppearance.MaterialComponents.Headline4"
-                    android:layout_width="330dp"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:text="Nama Wisata" />
 
@@ -60,7 +60,7 @@
                 <TextView
                     android:id="@+id/tv_lokasi_wisata"
                     style="@style/TextAppearance.MaterialComponents.Headline6"
-                    android:layout_width="330dp"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:text="Nama Lokasi"
                     app:layout_constraintTop_toBottomOf="@+id/tv_nama_wisata" />

@@ -6,7 +6,7 @@ class WisataApi {
 
         val GET_ALL_URL = BASE_URL + "wisata"
         val GET_BY_ID_URL = BASE_URL + "wisata/"
-        val ADD_URL = BASE_URL + "wisata/"
+        val ADD_URL = BASE_URL + "wisata"
         val UPDATE_URL = BASE_URL + "wisata/"
         val DELETE_URL = BASE_URL + "wisata/"
     }

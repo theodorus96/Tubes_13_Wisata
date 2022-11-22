@@ -19,7 +19,7 @@ import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import com.example.coba.Volley.WisataApi
+import com.example.coba.api.WisataApi
 import com.example.coba.room.UserDB
 import com.example.coba.models.Wisata
 import com.google.gson.Gson
@@ -58,7 +58,6 @@ class EditWisataActivity : AppCompatActivity() {
             }
             2-> {
                 btnSave.visibility = View.GONE
-                setWisata()
             }
         }
     }
@@ -79,6 +78,8 @@ class EditWisataActivity : AppCompatActivity() {
 
                 val returnIntent = Intent()
                 setResult(RESULT_OK, returnIntent)
+                sendNotifiaction()
+                sendNotification2()
                 finish()
 
             }, Response.ErrorListener { error->
@@ -106,17 +107,13 @@ class EditWisataActivity : AppCompatActivity() {
                 @Throws(AuthFailureError::class)
                 override fun getParams(): MutableMap<String, String> {
                     val params = HashMap<String, String>()
-                    params["nama"] = wisata.namaWisata
-                    params["lokasi"] = wisata.lokasiWisata
+                    params["nama"] = wisata.nama
+                    params["lokasi"] = wisata.lokasi
 
                     return params
                 }
 
-                override fun getBodyContentType(): String {
-                    return "application/json"
-                }
             }
-        // Menambahkan request ke request queue
         queue!!.add(stringRequest)
     }
 
@@ -126,10 +123,13 @@ class EditWisataActivity : AppCompatActivity() {
         val stringRequest: StringRequest =
             object : StringRequest(Method.GET, WisataApi.GET_BY_ID_URL + id, Response.Listener { response ->
                 val gson = Gson()
-                val wisata = gson.fromJson(response, Wisata::class.java)
+                val jsonObject = JSONObject(response)
+                val data = jsonObject.getJSONArray("data")
+                val wisata : Array<Wisata> = gson.fromJson(data.toString(), Array<Wisata>::class.java)
 
-                edit_title!!.setText(wisata.namaWisata)
-                edit_wisata!!.setText(wisata.lokasiWisata)
+
+                edit_title!!.setText(wisata[0].nama)
+                edit_wisata!!.setText(wisata[0].lokasi)
 
                 Toast.makeText(this@EditWisataActivity, "Data berhasil diambil", Toast.LENGTH_SHORT).show()
             },  Response.ErrorListener { error ->
@@ -198,8 +198,8 @@ class EditWisataActivity : AppCompatActivity() {
             @Throws(AuthFailureError::class)
             override fun getParams(): MutableMap<String, String> {
                 val params = HashMap<String, String>()
-                params["nama"] = wisata.namaWisata
-                params["lokasi"] = wisata.lokasiWisata
+                params["nama"] = wisata.nama
+                params["lokasi"] = wisata.lokasi
 
                 return params
             }
@@ -212,20 +212,8 @@ class EditWisataActivity : AppCompatActivity() {
 
     }
 
-    fun setWisata(){
-        val namaWisata : EditText = findViewById(R.id.edit_title)
-        val lokasiWisata : EditText = findViewById(R.id.edit_wisata)
-
-        WisataId = intent.getIntExtra("intent_id",0)
-
-        val wisata = db.WisataDAO().getWisata(WisataId)!!
-
-        namaWisata.setText(wisata.nama)
-        lokasiWisata.setText(wisata.lokasi)
-    }
-
     private fun setupListener(){
-        val intent = Intent(this, HomeActivity::class.java)
+        val intent2 = Intent(this, HomeActivity::class.java)
         val bundle : Bundle = Bundle()
 
         val namaWisata : EditText = findViewById(R.id.edit_title)
@@ -236,27 +224,13 @@ class EditWisataActivity : AppCompatActivity() {
         getWisataById(id)
         createNotificationChannel()
         btnSave.setOnClickListener {
-            println(namaWisata.text.toString())
-            println(lokasiWisata.text.toString())
             createWisata()
-//            db.WisataDAO().addWisata(
-//                Wisata(0,namaWisata.text.toString(),lokasiWisata.text.toString())
-//            )
-
-            sendNotifiaction()
-            sendNotification2()
-            startActivity(intent)
+            startActivity(intent2)
         }
 
         btnUpdate.setOnClickListener {
-            println(namaWisata.text.toString())
-            println(lokasiWisata.text.toString())
-
-//            db.WisataDAO().updateWisata(
-//                Wisata(WisataId,namaWisata.text.toString(),lokasiWisata.text.toString())
-//            )
             updateWisata(id)
-            startActivity(intent)
+            startActivity(intent2)
         }
     }
 
