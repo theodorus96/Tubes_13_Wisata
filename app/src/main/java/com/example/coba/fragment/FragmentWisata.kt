@@ -84,13 +84,34 @@ class FragmentWisata : Fragment() {
 
     fun deleteDialog(id: Int){
         val stringRequest: StringRequest = object :
-           /* StringRequest(
+            StringRequest(
                 Method.DELETE, WisataApi.DELETE_URL + id,
                 Response.Listener { response ->
                     val gson = Gson()
+                    val json = JSONObject(response)
+                    val wisata = gson.fromJson(response, Wisata::class.java)
 
-                }
-            )/*
+                    Toast.makeText(requireContext(), "Data berhasil diambil", Toast.LENGTH_SHORT).show()
+                }, Response.ErrorListener { error ->
+                    try{
+                        val responseBody = String(error.networkResponse.data, StandardCharsets.UTF_8)
+                        val errors = JSONObject(responseBody)
+                        Toast.makeText(
+                            requireContext(),
+                            errors.getString("message"),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } catch (e:Exception){
+                        Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                    }
+                }){
+                @Throws(AuthFailureError::class)
+                override fun getHeaders(): Map<String, String> {
+                        val headers = HashMap<String, String>()
+                        headers["Accept"] = "application/json"
+                        return headers
+                    }}
+                queue!!.add(stringRequest)
 
     }
     fun setupListener(){
