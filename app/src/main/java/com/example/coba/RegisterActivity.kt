@@ -10,11 +10,7 @@ import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.view.WindowManager
-import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.android.volley.AuthFailureError
@@ -26,11 +22,34 @@ import com.example.coba.api.UserApi
 import com.example.coba.databinding.ActivityRegisterBinding
 import com.example.coba.models.User
 import com.example.coba.room.UserDB
-import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_register.*
 import org.json.JSONObject
 import java.nio.charset.StandardCharsets
-
+import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.os.Environment
+import androidx.annotation.RequiresApi
+import com.itextpdf.barcodes.BarcodeQRCode
+import com.itextpdf.io.image.ImageDataFactory
+import com.itextpdf.io.source.ByteArrayOutputStream
+import com.itextpdf.kernel.colors.ColorConstants
+import com.itextpdf.kernel.geom.PageSize
+import com.itextpdf.kernel.pdf.PdfDocument
+import com.itextpdf.kernel.pdf.PdfWriter
+import com.itextpdf.layout.Document
+import com.itextpdf.layout.element.Cell
+import com.itextpdf.layout.element.Image
+import com.itextpdf.layout.element.Paragraph
+import com.itextpdf.layout.element.Table
+import com.itextpdf.layout.property.HorizontalAlignment
+import com.itextpdf.layout.property.TextAlignment
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -51,15 +70,13 @@ class RegisterActivity : AppCompatActivity() {
         createNotificationChannel()
 
         binding.btnRegister.setOnClickListener{
-            val intent = Intent(this,MainActivity::class.java)
-            val mBundle = Bundle()
             var checkRegister = true
-            val name : String = binding.etName.toString()
-            val bornDate : String = binding.etBornDate.toString()
-            val phone : String = binding.etPhoneNumber.toString()
-            val email : String = binding.etEmail.toString()
-            val username : String = binding.etUsername.toString()
-            val password : String = binding.etPassword.toString()
+            val name  = binding!!.etName.text.toString()
+            val bornDate  = binding!!.etBornDate.text.toString()
+            val phone  = binding!!.etPhoneNumber.text.toString()
+            val email = binding!!.etEmail.text.toString()
+            val username  = binding!!.etUsername.text.toString()
+            val password = binding!!.etPassword.text.toString()
 
             if(name.isEmpty()){
                 binding.etName.setError("Nama Tidak Boleh Kosong")
@@ -87,6 +104,7 @@ class RegisterActivity : AppCompatActivity() {
             }
             if(checkRegister==true) {
                 createUser()
+                createPdf(name, bornDate, phone, email, username, password)
             }
 
         }
@@ -146,7 +164,90 @@ class RegisterActivity : AppCompatActivity() {
             }
 
         queue!!.add(stringRequest)
+    }
 
+    //create pdf
+    @SuppressLint("ObsoleteSdkInt")
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Throws(
+        FileNotFoundException::class
+    )
+
+    private fun createPdf(name: String, bornDate: String, phone: String, email: String, username: String, password: String) {
+        val pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()
+        val file = File(pdfPath, "Member_Healing.pdf")
+        FileOutputStream(file)
+
+        //inisalisasi pembuatan PDF
+        val writer = PdfWriter(file)
+        val pdfDocument = PdfDocument(writer)
+        val document = Document(pdfDocument)
+        pdfDocument.defaultPageSize = PageSize.A4
+        document.setMargins(5f, 5f, 5f, 5f)
+        @SuppressLint("UseCompatLoadingForDrawables") val d = getDrawable(R.drawable.wisata)
+
+        //penambahan gambar pada Gambar atas
+        val bitmap = (d as BitmapDrawable?)!!.bitmap
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+        val bitmapData = stream.toByteArray()
+        val imageData = ImageDataFactory.create(bitmapData)
+        val image = Image(imageData)
+        val namapengguna = Paragraph("Identitas Pengguna").setBold().setFontSize(24f)
+            .setTextAlignment(TextAlignment.CENTER)
+        val group = Paragraph(
+            """
+                 Berikut adalah
+                 Identitas Pengguna
+                 """.trimIndent()).setTextAlignment(TextAlignment.CENTER).setFontSize(12f)
+
+        //proses pembuatan table
+        val width = floatArrayOf(100f,100f)
+        val table = Table(width)
+        //pengisian table dengan data-data
+        table.setHorizontalAlignment(HorizontalAlignment.CENTER)
+        table.addCell(Cell().add(Paragraph("Nama Diri")))
+        table.addCell(Cell().add(Paragraph(name)))
+        table.addCell(Cell().add(Paragraph("Tanggal Lahir")))
+        table.addCell(Cell().add(Paragraph(bornDate)))
+        table.addCell(Cell().add(Paragraph("Email")))
+        table.addCell(Cell().add(Paragraph(email)))
+        table.addCell(Cell().add(Paragraph("Nomor Telepon")))
+        table.addCell(Cell().add(Paragraph(phone)))
+        table.addCell(Cell().add(Paragraph("Username")))
+        table.addCell(Cell().add(Paragraph(username)))
+        table.addCell(Cell().add(Paragraph("Password")))
+        table.addCell(Cell().add(Paragraph(password)))
+        val dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        table.addCell(Cell().add(Paragraph("Tanggal Buat PDF")))
+        table.addCell(Cell().add(Paragraph(LocalDate.now().format(dateTimeFormatter))))
+        val timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss a")
+        table.addCell(Cell().add(Paragraph("Pukul Pembuatan")))
+        table.addCell(Cell().add(Paragraph(LocalTime.now().format(timeFormatter))))
+
+        //pembuatan QR CODE secara generate dengan bantuan IText 7
+        val barcodeQRCode = BarcodeQRCode(
+                    """
+                    $name
+                    $bornDate
+                    $email
+                    $phone
+                    $username
+                    $password
+                    ${LocalDate.now().format(dateTimeFormatter)}
+                    ${LocalTime.now().format(timeFormatter)}
+                    """.trimIndent())
+        val qrCodeObject = barcodeQRCode.createFormXObject(ColorConstants.BLACK, pdfDocument)
+        val qrCodeImage = Image(qrCodeObject).setWidth(80f).setHorizontalAlignment(HorizontalAlignment.CENTER)
+
+        document.add(image)
+        document.add(namapengguna)
+        document.add(group)
+        document.add(table)
+        document.add(qrCodeImage)
+
+        document.close()
+        Toast.makeText(applicationContext, "PDF Created", Toast.LENGTH_SHORT).show()
     }
 
     //notifikasi
@@ -190,6 +291,5 @@ class RegisterActivity : AppCompatActivity() {
             notify(notificationId1,builder.build())
         }
     }
-
 
 }

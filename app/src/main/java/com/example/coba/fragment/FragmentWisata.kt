@@ -81,7 +81,6 @@ class FragmentWisata : Fragment() {
             val data = jsonObject.getJSONArray("data")
             val wisata : Array<Wisata> = gson.fromJson(data.toString(), Array<Wisata>::class.java)
 
-            println(wisata[0].nama)
             adapter!!.setWisataList(wisata)
 
             if (!wisata.isEmpty())
