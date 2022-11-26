@@ -19,6 +19,7 @@ import com.example.coba.camera.MainCamera
 import com.example.coba.models.User
 import com.example.coba.room.UserDB
 import com.google.gson.Gson
+import es.dmoral.toasty.Toasty
 import org.json.JSONObject
 import java.nio.charset.StandardCharsets
 
@@ -83,7 +84,7 @@ class EditActivity : AppCompatActivity() {
                     bornDate.setText(user.borndate)
                     phoneNum.setText(user.phoneNum)
 
-                    Toast.makeText(this,"Data berhasil diambil", Toast.LENGTH_SHORT).show()
+                    Toasty.success(this,"Data User Berhasil Diambil", Toast.LENGTH_SHORT).show()
 
                 },
                 Response.ErrorListener{ error ->
@@ -91,13 +92,13 @@ class EditActivity : AppCompatActivity() {
                     try{
                         val responseBody = String(error.networkResponse.data, StandardCharsets.UTF_8)
                         val errors = JSONObject(responseBody)
-                        Toast.makeText(
+                        Toasty.error(
                             this,
                             errors.getString("message"),
                             Toast.LENGTH_SHORT
                         ).show()
                     } catch (e: Exception){
-                        Toast.makeText(this@EditActivity ,e.message, Toast.LENGTH_SHORT).show()
+                        Toasty.error(this@EditActivity ,"Data User Gagal Diambil", Toast.LENGTH_SHORT).show()
                     }
                 }) {
             @Throws(AuthFailureError::class)
@@ -132,7 +133,7 @@ class EditActivity : AppCompatActivity() {
                 var user = gson.fromJson(response, User::class.java)
 
                 if(user != null)
-                    Toast.makeText(this@EditActivity, "Data berhasil diubah", Toast.LENGTH_SHORT).show()
+                    Toasty.success(this@EditActivity, "Data User Berhasil Diubah", Toast.LENGTH_SHORT).show()
 
                 val returnIntent = Intent()
                 setResult(RESULT_OK, returnIntent)
@@ -144,13 +145,13 @@ class EditActivity : AppCompatActivity() {
                 try{
                     val responseBody = String(error.networkResponse.data, StandardCharsets.UTF_8)
                     val errors = JSONObject(responseBody)
-                    Toast.makeText(
+                    Toasty.error(
                         this,
                         errors.getString("message"),
                         Toast.LENGTH_SHORT
                     ).show()
                 } catch (e: Exception){
-                    Toast.makeText(this@EditActivity, e.message, Toast.LENGTH_SHORT).show()
+                    Toasty.error(this@EditActivity, "Data User Gagal Diubah", Toast.LENGTH_SHORT).show()
                 }
             }){
                 @Throws(AuthFailureError::class)

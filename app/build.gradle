@@ -75,4 +75,7 @@ dependencies {
 
     //implementasi PDF Library IText
     implementation 'com.itextpdf:itext7-core:7.1.13'
+
+    //toast grendel
+    implementation 'com.github.GrenderG:Toasty:1.5.2'
 }

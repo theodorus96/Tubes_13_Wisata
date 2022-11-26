@@ -23,6 +23,7 @@ import com.example.coba.databinding.FragmentProfilBinding
 import com.example.coba.models.User
 import com.example.coba.room.UserDB
 import com.google.gson.Gson
+import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.fragment_profil.*
 import org.json.JSONObject
 import java.nio.charset.StandardCharsets
@@ -82,7 +83,7 @@ class FragmentProfil : Fragment(R.layout.fragment_profil) {
                     bornDate.setText(user.borndate)
                     phoneNum.setText(user.phoneNum)
 
-                    Toast.makeText(requireActivity(),"Data berhasil diambil", Toast.LENGTH_SHORT).show()
+                    Toasty.success(requireActivity(),"Data User Berhasil Diambil", Toast.LENGTH_SHORT).show()
 
                 },
                 Response.ErrorListener{ error ->
@@ -90,13 +91,13 @@ class FragmentProfil : Fragment(R.layout.fragment_profil) {
                     try{
                         val responseBody = String(error.networkResponse.data, StandardCharsets.UTF_8)
                         val errors = JSONObject(responseBody)
-                        Toast.makeText(
+                        Toasty.error(
                             requireActivity(),
                             errors.getString("message"),
                             Toast.LENGTH_SHORT
                         ).show()
                     } catch (e: Exception){
-                        Toast.makeText(requireActivity() ,e.message, Toast.LENGTH_SHORT).show()
+                        Toasty.error(requireActivity() ,"Data User Gagal Diambil", Toast.LENGTH_SHORT).show()
                     }
                 }) {
             @Throws(AuthFailureError::class)

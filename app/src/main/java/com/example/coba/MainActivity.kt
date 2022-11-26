@@ -19,6 +19,7 @@ import com.example.coba.models.User
 import com.example.coba.room.UserDB
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
+import es.dmoral.toasty.Toasty
 import org.json.JSONObject
 import java.nio.charset.StandardCharsets
 
@@ -88,14 +89,13 @@ class MainActivity : AppCompatActivity() {
                                 val responseBody =
                                     String(error.networkResponse.data, StandardCharsets.UTF_8)
                                 val errors = JSONObject(responseBody)
-                                Toast.makeText(
+                                Toasty.error(
                                     this@MainActivity,
                                     errors.getString("message"),
                                     Toast.LENGTH_SHORT
                                 ).show()
                             } catch (e: java.lang.Exception) {
-                                Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_SHORT)
-                                    .show()
+                                Toasty.error(this@MainActivity, "Login Tidak Berhasil!!", Toast.LENGTH_SHORT, true).show();
                             }
                         }) {
                     @Throws(AuthFailureError::class)

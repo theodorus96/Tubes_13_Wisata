@@ -23,6 +23,7 @@ import com.example.coba.api.WisataApi
 import com.example.coba.room.UserDB
 import com.example.coba.models.Wisata
 import com.google.gson.Gson
+import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.activity_edit_wisata.*
 import org.json.JSONObject
 import java.nio.charset.StandardCharsets
@@ -74,7 +75,7 @@ class EditWisataActivity : AppCompatActivity() {
                 val wisata = gson.fromJson(response, Wisata::class.java)
 
                 if(wisata!=null)
-                    Toast.makeText(this@EditWisataActivity, "Data Berhasil Ditambahkan", Toast.LENGTH_SHORT).show()
+                    Toasty.success(this@EditWisataActivity, "Wisata Berhasil Ditambahkan!", Toast.LENGTH_SHORT, true).show();
 
                 val returnIntent = Intent()
                 setResult(RESULT_OK, returnIntent)
@@ -87,13 +88,13 @@ class EditWisataActivity : AppCompatActivity() {
                 try{
                     val responseBody = String(error.networkResponse.data, StandardCharsets.UTF_8)
                     val errors = JSONObject(responseBody)
-                    Toast.makeText(
+                    Toasty.error(
                         this@EditWisataActivity,
                         errors.getString("message"),
                         Toast.LENGTH_SHORT
                     ).show()
                 }catch (e:Exception){
-                    Toast.makeText(this@EditWisataActivity, e.message, Toast.LENGTH_SHORT).show()
+                    Toasty.error(this@EditWisataActivity, "Wisata Gagal Dibuat!", Toast.LENGTH_SHORT).show()
                 }
             }) {
                 @Throws(AuthFailureError::class)
@@ -131,18 +132,18 @@ class EditWisataActivity : AppCompatActivity() {
                 edit_title!!.setText(wisata[0].nama)
                 edit_wisata!!.setText(wisata[0].lokasi)
 
-                Toast.makeText(this@EditWisataActivity, "Data berhasil diambil", Toast.LENGTH_SHORT).show()
+                Toasty.success(this@EditWisataActivity, "Data Wisata Berhasil Diambil", Toast.LENGTH_SHORT).show()
             },  Response.ErrorListener { error ->
                 try{
                     val responseBody = String(error.networkResponse.data, StandardCharsets.UTF_8)
                     val errors = JSONObject(responseBody)
-                    Toast.makeText(
+                    Toasty.error(
                         this@EditWisataActivity,
                         errors.getString("message"),
                         Toast.LENGTH_SHORT
                     ).show()
                 }catch (e: Exception){
-                    Toast.makeText(this@EditWisataActivity, e.message, Toast.LENGTH_SHORT).show()
+                    Toasty.error(this@EditWisataActivity, "Data Wisata Gagal Diambil", Toast.LENGTH_SHORT).show()
                 }
             }){
                 @Throws(AuthFailureError::class)
@@ -169,7 +170,7 @@ class EditWisataActivity : AppCompatActivity() {
                 val wisata = gson.fromJson(response, Wisata::class.java)
 
                 if(wisata != null)
-                    Toast.makeText(this@EditWisataActivity, "Data Berhasil Diupdate", Toast.LENGTH_SHORT).show()
+                    Toasty.success(this@EditWisataActivity, "Data Wisata Berhasil Diupdate", Toast.LENGTH_SHORT).show()
                 val returnIntent = Intent()
                 setResult(RESULT_OK, returnIntent)
                 finish()
@@ -178,13 +179,13 @@ class EditWisataActivity : AppCompatActivity() {
                 try{
                     val responseBody = String(error.networkResponse.data, StandardCharsets.UTF_8)
                     val errors = JSONObject(responseBody)
-                    Toast.makeText(
+                    Toasty.error(
                         this@EditWisataActivity,
                         errors.getString("message"),
                         Toast.LENGTH_SHORT
                     ).show()
                 }catch (e:Exception){
-                    Toast.makeText(this@EditWisataActivity, e.message, Toast.LENGTH_SHORT).show()
+                    Toasty.error(this@EditWisataActivity, "Data Wisata Gagal Diupdate", Toast.LENGTH_SHORT).show()
                 }
             }){
             @Throws(AuthFailureError::class)

@@ -44,6 +44,7 @@ import com.itextpdf.layout.element.Paragraph
 import com.itextpdf.layout.element.Table
 import com.itextpdf.layout.property.HorizontalAlignment
 import com.itextpdf.layout.property.TextAlignment
+import es.dmoral.toasty.Toasty
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -120,8 +121,7 @@ class RegisterActivity : AppCompatActivity() {
         )
         val stringRequest: StringRequest =
             object: StringRequest(Method.POST, UserApi.ADD_URL, Response.Listener { response ->
-
-                Toast.makeText(this@RegisterActivity, "Data berhasil ditambahkan", Toast.LENGTH_SHORT).show()
+                Toasty.success(this@RegisterActivity, "Data berhasil ditambahkan!", Toast.LENGTH_SHORT, true).show();
                 sendNotifiaction()
                 val returnIntent = Intent()
                 setResult(RESULT_OK, returnIntent)
@@ -133,13 +133,13 @@ class RegisterActivity : AppCompatActivity() {
                 try{
                     val responseBody = String(error.networkResponse.data, StandardCharsets.UTF_8)
                     val errors = JSONObject(responseBody)
-                    Toast.makeText(
+                    Toasty.error(
                         this,
                         errors.getString("message"),
                         Toast.LENGTH_SHORT
                     ).show()
                 } catch (e: Exception){
-                    Toast.makeText(this@RegisterActivity, e.message, Toast.LENGTH_SHORT).show()
+                    Toasty.error(this@RegisterActivity,"Register tidak berhasil!", Toast.LENGTH_SHORT).show()
                 }
             }){
                 @Throws(AuthFailureError::class)
@@ -247,7 +247,7 @@ class RegisterActivity : AppCompatActivity() {
         document.add(qrCodeImage)
 
         document.close()
-        Toast.makeText(applicationContext, "PDF Created", Toast.LENGTH_SHORT).show()
+        Toasty.success(applicationContext, "PDF Berhasil dibuat!", Toast.LENGTH_SHORT, true).show();
     }
 
     //notifikasi

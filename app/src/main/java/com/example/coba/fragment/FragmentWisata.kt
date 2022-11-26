@@ -22,6 +22,7 @@ import com.example.coba.api.WisataApi
 import com.example.coba.databinding.FragmentWisataBinding
 import com.example.coba.models.Wisata
 import com.google.gson.Gson
+import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.fragment_wisata.*
 import org.json.JSONObject
 import java.nio.charset.StandardCharsets
@@ -84,7 +85,7 @@ class FragmentWisata : Fragment() {
             adapter!!.setWisataList(wisata)
 
             if (!wisata.isEmpty())
-                Toast.makeText(activity1, "Data berhasil diambil", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity1, "Data Wisata Berhasil Diambil", Toast.LENGTH_SHORT).show()
             else
                 Toast.makeText(activity1, "Data Kosong", Toast.LENGTH_SHORT).show()
         },Response.ErrorListener { error ->
