@@ -78,4 +78,11 @@ dependencies {
 
     //toast grendel
     implementation 'com.github.GrenderG:Toasty:1.5.2'
+
+    //easyPermission
+    implementation 'com.vmadalin:easypermissions-ktx:1.0.0'
+
+    def lifecycle_version = "2.5.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
 }
