@@ -19,12 +19,11 @@ import com.example.coba.camera.MainCamera
 import com.example.coba.models.User
 import com.example.coba.room.UserDB
 import com.google.gson.Gson
-import com.romainpiel.shimmer.Shimmer
-import com.romainpiel.shimmer.ShimmerTextView
 import es.dmoral.toasty.Toasty
 import org.json.JSONObject
 import java.nio.charset.StandardCharsets
-
+import com.romainpiel.shimmer.Shimmer
+import com.romainpiel.shimmer.ShimmerTextView
 
 class EditActivity : AppCompatActivity() {
     var tv: ShimmerTextView? = null
@@ -134,7 +133,7 @@ class EditActivity : AppCompatActivity() {
             phoneNum!!.text.toString(),
             username!!.text.toString(),
             password,
-            )
+        )
         val stringRequest: StringRequest =
             object: StringRequest(Method.PUT, UserApi.UPDATE_URL + id, Response.Listener { response ->
                 val gson = Gson()

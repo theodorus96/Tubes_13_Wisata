@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity() {
         val btnRegister: Button = findViewById(R.id.btnRegister)
         queue = Volley.newRequestQueue(this)
 
+
         btnGantiBackground.setOnClickListener {
             val url = "https://picsum.photos/200/300"
 
