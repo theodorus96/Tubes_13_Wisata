@@ -14,12 +14,16 @@ import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.coba.api.UserApi
+import com.example.coba.databinding.ActivityMainBinding
 import com.example.coba.models.User
 import com.example.coba.room.UserDB
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
 import es.dmoral.toasty.Toasty
+import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONObject
 import java.nio.charset.StandardCharsets
 
@@ -27,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var inputUsername: TextInputLayout
     private lateinit var inputPassword: TextInputLayout
     private lateinit var mainLayout: ConstraintLayout
+    private lateinit var binding: ActivityMainBinding
     lateinit var  mBundle: Bundle
     lateinit var vUsername: String
     lateinit var vPassword : String
@@ -36,13 +41,26 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         getSupportActionBar()?.hide()
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         inputUsername = findViewById(R.id.inputLayoutUsername)
         inputPassword = findViewById(R.id.inputLayoutPassword)
         mainLayout = findViewById(R.id.mainLayout)
         val btnLogin: Button = findViewById(R.id.btnLogin)
         val btnRegister: Button = findViewById(R.id.btnRegister)
         queue = Volley.newRequestQueue(this)
+
+        btnGantiBackground.setOnClickListener {
+            val url = "https://picsum.photos/200/300"
+
+            Glide.with(this)
+                .load(url)
+                .fitCenter()
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .placeholder(R.drawable.placeholder)
+                .into(binding.background)
+        }
 
         btnRegister.setOnClickListener {
             val moveRegister = Intent(this@MainActivity, RegisterActivity::class.java)
