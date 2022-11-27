@@ -7,13 +7,16 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
     <ImageView
-        android:layout_width="598dp"
-        android:layout_height="984dp"
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:alpha="0.6"
         android:background="@drawable/background"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="-187dp" />
+
 
     <ImageView
         android:id="@+id/imageView"
@@ -129,6 +132,31 @@
             android:text="Register"
             android:textColor="@color/white"
             app:iconTint="#FFFFFF" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutGantiBackground"
+        android:layout_width="250dp"
+        android:layout_height="49dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.59"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="1">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGantiBackground"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="243dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/brown"
+
+            android:text="Ganti Background"
+            android:textColor="@color/white"
+            app:iconTint="#FFFFFF"
+            tools:layout_editor_absoluteX="95dp"
+            tools:layout_editor_absoluteY="643dp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
