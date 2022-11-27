@@ -19,12 +19,16 @@ import com.example.coba.camera.MainCamera
 import com.example.coba.models.User
 import com.example.coba.room.UserDB
 import com.google.gson.Gson
+import com.romainpiel.shimmer.Shimmer
+import com.romainpiel.shimmer.ShimmerTextView
 import es.dmoral.toasty.Toasty
 import org.json.JSONObject
 import java.nio.charset.StandardCharsets
 
 
 class EditActivity : AppCompatActivity() {
+    var tv: ShimmerTextView? = null
+    var shimmer: Shimmer? = null
 
     val db by lazy { UserDB(this) }
     var sharedPreferences: SharedPreferences? = null
@@ -83,6 +87,10 @@ class EditActivity : AppCompatActivity() {
                     email.setText(user.email)
                     bornDate.setText(user.borndate)
                     phoneNum.setText(user.phoneNum)
+
+                    val tv: ShimmerTextView = findViewById(R.id.textProfile)
+                    shimmer = Shimmer()
+                    shimmer!!.start(tv)
 
                     Toasty.success(this,"Data User Berhasil Diambil", Toast.LENGTH_SHORT).show()
 

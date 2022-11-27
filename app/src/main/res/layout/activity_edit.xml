@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background">
 
-    <TextView
+    <com.romainpiel.shimmer.ShimmerTextView
         android:id="@+id/textProfile"
         style="@style/TextAppearance.MaterialComponents.Headline5"
         android:layout_width="179dp"

@@ -82,6 +82,9 @@ dependencies {
     //easyPermission
     implementation 'com.vmadalin:easypermissions-ktx:1.0.0'
 
+    //Shimmer Library
+    implementation 'com.romainpiel.shimmer:library:1.4.0@aar'
+
     def lifecycle_version = "2.5.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
