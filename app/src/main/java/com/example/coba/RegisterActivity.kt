@@ -71,43 +71,7 @@ class RegisterActivity : AppCompatActivity() {
         createNotificationChannel()
 
         binding.btnRegister.setOnClickListener{
-            var checkRegister = true
-            val name  = binding!!.etName.text.toString()
-            val bornDate  = binding!!.etBornDate.text.toString()
-            val phone  = binding!!.etPhoneNumber.text.toString()
-            val email = binding!!.etEmail.text.toString()
-            val username  = binding!!.etUsername.text.toString()
-            val password = binding!!.etPassword.text.toString()
-
-            if(name.isEmpty()){
-                binding.etName.setError("Nama Tidak Boleh Kosong")
-                checkRegister = false
-            }
-            if(username.isEmpty()){
-                binding.etUsername.setError("Username Tidak Boleh Kosong")
-                checkRegister = false
-            }
-            if(password.isEmpty()){
-                binding.etPassword.setError("Password Tidak Boleh Kosong")
-                checkRegister = false
-            }
-            if(email.isEmpty()){
-                binding.etEmail.setError("Email Tidak Boleh Kosong")
-                checkRegister = false
-            }
-            if(bornDate.isEmpty()){
-                binding.etBornDate.setError("Tanggal Lahir Tidak Boleh Kosong")
-                checkRegister = false
-            }
-            if(phone.isEmpty()){
-                binding.etPhoneNumber.setError("Nomor Telepon Tidak Boleh Kosong")
-                checkRegister = false
-            }
-            if(checkRegister==true) {
                 createUser()
-                createPdf(name, bornDate, phone, email, username, password)
-            }
-
         }
     }
     private fun createUser(){
@@ -123,6 +87,12 @@ class RegisterActivity : AppCompatActivity() {
             object: StringRequest(Method.POST, UserApi.ADD_URL, Response.Listener { response ->
                 Toasty.success(this@RegisterActivity, "Data berhasil ditambahkan!", Toast.LENGTH_SHORT, true).show();
                 sendNotifiaction()
+//                createPdf(binding!!.etName.text.toString(),
+//                    binding!!.etBornDate.text.toString(),
+//                    binding!!.etEmail.text.toString(),
+//                    binding!!.etPhoneNumber.text.toString(),
+//                    binding!!.etUsername.text.toString(),
+//                    binding!!.etPassword.text.toString())
                 val returnIntent = Intent()
                 setResult(RESULT_OK, returnIntent)
                 finish()
