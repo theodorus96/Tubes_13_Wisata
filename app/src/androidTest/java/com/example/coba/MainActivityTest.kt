@@ -34,6 +34,24 @@ class MainActivityTest {
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         Thread.sleep(500)
 
+        val materialButton = onView(
+            allOf(
+                withId(R.id.btnLogin), withText("Login"),
+                childAtPosition(
+                    allOf(
+                        withId(R.id.linearLayout),
+                        childAtPosition(
+                            withId(R.id.mainLayout),
+                            4
+                        )
+                    ),
+                    0
+                ),
+                isDisplayed()
+            )
+        )
+        materialButton.perform(click())
+
         val textInputEditText = onView(
             allOf(
                 childAtPosition(
@@ -64,7 +82,23 @@ class MainActivityTest {
 
         pressBack()
 
-        pressBack()
+        val materialButton2 = onView(
+            allOf(
+                withId(R.id.btnLogin), withText("Login"),
+                childAtPosition(
+                    allOf(
+                        withId(R.id.linearLayout),
+                        childAtPosition(
+                            withId(R.id.mainLayout),
+                            4
+                        )
+                    ),
+                    0
+                ),
+                isDisplayed()
+            )
+        )
+        materialButton2.perform(click())
 
         val textInputEditText3 = onView(
             allOf(
@@ -93,44 +127,6 @@ class MainActivityTest {
             )
         )
         textInputEditText4.perform(replaceText("123"), closeSoftKeyboard())
-
-        pressBack()
-
-        val materialButton = onView(
-            allOf(
-                withId(R.id.btnLogin), withText("Login"),
-                childAtPosition(
-                    allOf(
-                        withId(R.id.linearLayout),
-                        childAtPosition(
-                            withId(R.id.mainLayout),
-                            4
-                        )
-                    ),
-                    0
-                ),
-                isDisplayed()
-            )
-        )
-        materialButton.perform(click())
-
-        val materialButton2 = onView(
-            allOf(
-                withId(R.id.btnLogin), withText("Login"),
-                childAtPosition(
-                    allOf(
-                        withId(R.id.linearLayout),
-                        childAtPosition(
-                            withId(R.id.mainLayout),
-                            4
-                        )
-                    ),
-                    0
-                ),
-                isDisplayed()
-            )
-        )
-        materialButton2.perform(click())
 
         pressBack()
 
