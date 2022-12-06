@@ -4,7 +4,10 @@ package com.example.coba
 import android.view.View
 import android.view.ViewGroup
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.UiController
+import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.assertion.ViewAssertions.*
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -27,36 +30,6 @@ class EditWisataActivityTest {
 
     @Test
     fun editWisataActivityTest() {
-        val appCompatEditText = onView(
-            allOf(
-                withId(R.id.edit_title),
-                childAtPosition(
-                    childAtPosition(
-                        withId(android.R.id.content),
-                        0
-                    ),
-                    0
-                ),
-                isDisplayed()
-            )
-        )
-        appCompatEditText.perform(replaceText("1"), closeSoftKeyboard())
-
-        val appCompatEditText2 = onView(
-            allOf(
-                withId(R.id.edit_wisata),
-                childAtPosition(
-                    childAtPosition(
-                        withId(android.R.id.content),
-                        0
-                    ),
-                    1
-                ),
-                isDisplayed()
-            )
-        )
-        appCompatEditText2.perform(replaceText("1"), closeSoftKeyboard())
-
         val materialButton = onView(
             allOf(
                 withId(R.id.button_save), withText("SAVE"),
@@ -71,6 +44,68 @@ class EditWisataActivityTest {
             )
         )
         materialButton.perform(click())
+        onView(isRoot()).perform(waitFor(3000))
+
+        val appCompatEditText = onView(
+            allOf(
+                withId(R.id.edit_title),
+                childAtPosition(
+                    childAtPosition(
+                        withId(android.R.id.content),
+                        0
+                    ),
+                    0
+                ),
+                isDisplayed()
+            )
+        )
+        appCompatEditText.perform(replaceText("Pantai Kuta"), closeSoftKeyboard())
+
+        val materialButton2 = onView(
+            allOf(
+                withId(R.id.button_save), withText("SAVE"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(android.R.id.content),
+                        0
+                    ),
+                    2
+                ),
+                isDisplayed()
+            )
+        )
+        materialButton2.perform(click())
+        onView(isRoot()).perform(waitFor(3000))
+
+        val appCompatEditText2 = onView(
+            allOf(
+                withId(R.id.edit_wisata),
+                childAtPosition(
+                    childAtPosition(
+                        withId(android.R.id.content),
+                        0
+                    ),
+                    1
+                ),
+                isDisplayed()
+            )
+        )
+        appCompatEditText2.perform(replaceText("Bali"), closeSoftKeyboard())
+
+        val materialButton3 = onView(
+            allOf(
+                withId(R.id.button_save), withText("SAVE"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(android.R.id.content),
+                        0
+                    ),
+                    2
+                ),
+                isDisplayed()
+            )
+        )
+        materialButton3.perform(click())
     }
 
     private fun childAtPosition(
@@ -87,6 +122,22 @@ class EditWisataActivityTest {
                 val parent = view.parent
                 return parent is ViewGroup && parentMatcher.matches(parent)
                         && view == parent.getChildAt(position)
+            }
+        }
+    }
+
+    fun waitFor(delay: Long): ViewAction? {
+        return object : ViewAction {
+            override fun getConstraints(): Matcher<View> {
+                return isRoot()
+            }
+
+            override fun getDescription(): String {
+                return "Wait for $delay milliseconds."
+            }
+
+            override fun perform(uiController: UiController, view: View) {
+                uiController.loopMainThreadForAtLeast(delay)
             }
         }
     }

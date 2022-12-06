@@ -67,80 +67,57 @@ class EditWisataActivity : AppCompatActivity() {
     }
 
     private fun createWisata(){
+        val wisata = Wisata(
+            edit_title!!.text.toString(),
+            edit_wisata!!.text.toString(),
+        )
+        val stringRequest: StringRequest =
+            object: StringRequest(Method.POST, WisataApi.ADD_URL, Response.Listener { response->
+                val gson = Gson()
+                val wisata = gson.fromJson(response, Wisata::class.java)
 
-        setLoading(true)
+                if(wisata!=null)
+                    Toasty.success(this@EditWisataActivity, "Wisata Berhasil Ditambahkan!", Toast.LENGTH_SHORT, true).show();
 
-        if (edit_title!!.text.toString().isEmpty()){
-            Toast.makeText(this@EditWisataActivity, "NAMA TIDAK BOLEH KOSONG", Toast.LENGTH_SHORT).show()
-        }
-        else if (edit_wisata!!.text.toString().isEmpty()){
-            Toast.makeText(this@EditWisataActivity, "LOKASI TIDAK BOLEH KOSONG", Toast.LENGTH_SHORT).show()
-        }
-        else {
-            val wisata = Wisata(
-                edit_title!!.text.toString(),
-                edit_wisata!!.text.toString(),
-            )
-            val stringRequest: StringRequest =
-                object :
-                    StringRequest(Method.POST, WisataApi.ADD_URL, Response.Listener { response ->
-                        val gson = Gson()
-                        val wisata = gson.fromJson(response, Wisata::class.java)
+                val returnIntent = Intent()
+                setResult(RESULT_OK, returnIntent)
+                sendNotifiaction()
+                sendNotification2()
+                finish()
 
-                        if (wisata != null)
-                            Toasty.success(
-                                this@EditWisataActivity,
-                                "Wisata Berhasil Ditambahkan!",
-                                Toast.LENGTH_SHORT,
-                                true
-                            ).show();
+            }, Response.ErrorListener { error->
 
-                        val returnIntent = Intent()
-                        setResult(RESULT_OK, returnIntent)
-                        sendNotifiaction()
-                        sendNotification2()
-                        finish()
-
-                    }, Response.ErrorListener { error ->
-
-                        try {
-                            val responseBody =
-                                String(error.networkResponse.data, StandardCharsets.UTF_8)
-                            val errors = JSONObject(responseBody)
-                            Toasty.error(
-                                this@EditWisataActivity,
-                                errors.getString("message"),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } catch (e: Exception) {
-                            Toasty.error(
-                                this@EditWisataActivity,
-                                "Wisata Gagal Dibuat!",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }) {
-                    @Throws(AuthFailureError::class)
-                    override fun getHeaders(): MutableMap<String, String> {
-                        val headers = HashMap<String, String>()
-                        headers["Accept"] = "application/json"
-                        return headers
-
-                    }
-
-                    @Throws(AuthFailureError::class)
-                    override fun getParams(): MutableMap<String, String> {
-                        val params = HashMap<String, String>()
-                        params["nama"] = wisata.nama
-                        params["lokasi"] = wisata.lokasi
-
-                        return params
-                    }
+                try{
+                    val responseBody = String(error.networkResponse.data, StandardCharsets.UTF_8)
+                    val errors = JSONObject(responseBody)
+                    Toasty.error(
+                        this@EditWisataActivity,
+                        errors.getString("message"),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }catch (e:Exception){
+                    Toasty.error(this@EditWisataActivity, "Wisata Gagal Dibuat!", Toast.LENGTH_SHORT).show()
+                }
+            }) {
+                @Throws(AuthFailureError::class)
+                override fun getHeaders(): MutableMap<String, String> {
+                    val headers = HashMap<String, String>()
+                    headers["Accept"] = "application/json"
+                    return headers
 
                 }
-            queue!!.add(stringRequest)
-        }
-        setLoading(false)
+
+                @Throws(AuthFailureError::class)
+                override fun getParams(): MutableMap<String, String> {
+                    val params = HashMap<String, String>()
+                    params["nama"] = wisata.nama
+                    params["lokasi"] = wisata.lokasi
+
+                    return params
+                }
+
+            }
+        queue!!.add(stringRequest)
     }
 
     private fun getWisataById(id: Long){
@@ -251,7 +228,7 @@ class EditWisataActivity : AppCompatActivity() {
         createNotificationChannel()
         btnSave.setOnClickListener {
             createWisata()
-            startActivity(intent2)
+            //startActivity(intent2)
         }
 
         btnUpdate.setOnClickListener {
@@ -333,16 +310,16 @@ class EditWisataActivity : AppCompatActivity() {
 
         }
     }
-    private fun setLoading(isLoading: Boolean){
-        if(isLoading){
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
-            )
-            layoutLoading!!.visibility = View.VISIBLE
-        }else{
-            window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-            layoutLoading!!.visibility = View.INVISIBLE
-        }
-    }
+//    private fun setLoading(isLoading: Boolean){
+//        if(isLoading){
+//            window.setFlags(
+//                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+//                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+//            )
+//            layoutLoading!!.visibility = View.VISIBLE
+//        }else{
+//            window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+//            layoutLoading!!.visibility = View.INVISIBLE
+//        }
+//    }
 }
