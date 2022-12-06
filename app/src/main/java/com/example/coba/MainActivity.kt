@@ -72,14 +72,14 @@ class MainActivity : AppCompatActivity() {
             val username: String = inputUsername.getEditText()?.getText().toString()
             val password: String = inputPassword.getEditText()?.getText().toString()
 
-            if (username.isEmpty()) {
-                inputUsername.setError("Username must be filled with text")
-            }
-
-            if (password.isEmpty()) {
-                inputPassword.setError("Password must be filled with text")
-            }
-            if (username.isEmpty() == false && password.isEmpty() == false) {
+//            if (username.isEmpty()) {
+//                inputUsername.setError("Username must be filled with text")
+//            }
+//
+//            if (password.isEmpty()) {
+//                inputPassword.setError("Password must be filled with text")
+//            }
+//            if (username.isEmpty() == false && password.isEmpty() == false) {
 
                 val stringRequest: StringRequest = object :
                     StringRequest(Method.POST, UserApi.LOGIN_URL,
@@ -135,7 +135,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 queue!!.add(stringRequest)
 
-            }
+          //  }
         })
     }
 
