@@ -87,12 +87,12 @@ class RegisterActivity : AppCompatActivity() {
             object: StringRequest(Method.POST, UserApi.ADD_URL, Response.Listener { response ->
                 Toasty.success(this@RegisterActivity, "Data berhasil ditambahkan!", Toast.LENGTH_SHORT, true).show();
                 sendNotifiaction()
-//                createPdf(binding!!.etName.text.toString(),
-//                    binding!!.etBornDate.text.toString(),
-//                    binding!!.etEmail.text.toString(),
-//                    binding!!.etPhoneNumber.text.toString(),
-//                    binding!!.etUsername.text.toString(),
-//                    binding!!.etPassword.text.toString())
+                createPdf(binding!!.etName.text.toString(),
+                    binding!!.etBornDate.text.toString(),
+                    binding!!.etEmail.text.toString(),
+                    binding!!.etPhoneNumber.text.toString(),
+                    binding!!.etUsername.text.toString(),
+                    binding!!.etPassword.text.toString())
                 val returnIntent = Intent()
                 setResult(RESULT_OK, returnIntent)
                 finish()

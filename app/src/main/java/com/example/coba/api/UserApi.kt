@@ -2,7 +2,7 @@ package com.example.coba.api
 
 class UserApi {
     companion object{
-        val BASE_URL = "http://192.168.0.107/Tubes_Wisata/ci4-apiserver/public/"
+        val BASE_URL = "http://192.168.143.172/Tubes_Wisata/ci4-apiserver/public/"
 
         val GET_BY_ID_URL = BASE_URL + "user/"
         val ADD_URL = BASE_URL + "user"

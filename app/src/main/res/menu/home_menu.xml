@@ -8,6 +8,10 @@
         android:icon="@drawable/ic_wisata_24"
         android:title="Wisata"/>
 
+    <item android:id="@+id/review"
+        android:icon="@drawable/ic_baseline_newspaper_24"
+        android:title="Review"/>
+
     <item android:id="@+id/map"
         android:icon="@drawable/ic_baseline_location_on_24"
         android:title="Peta"/>

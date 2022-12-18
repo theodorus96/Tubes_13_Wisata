@@ -11,6 +11,7 @@ import com.example.coba.fragment.FragmentProfil
 import com.example.coba.fragment.FragmentWisata
 import com.example.coba.map.MainMap
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.activity_review.*
 
 class HomeActivity : AppCompatActivity() {
 
@@ -20,6 +21,7 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         changeFragment(FragmentHome())
+
         bottomNav= findViewById(R.id.bottom_navigation) as BottomNavigationView
         bottomNav.setOnNavigationItemSelectedListener {
             when (it.itemId) {
@@ -29,6 +31,11 @@ class HomeActivity : AppCompatActivity() {
                 }
                 R.id.wisata -> {
                     changeFragment(FragmentWisata())
+                    return@setOnNavigationItemSelectedListener true
+                }
+                R.id.review -> {
+                    val moveReview = Intent(this@HomeActivity, ActivityReview::class.java)
+                    startActivity(moveReview)
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.map -> {
